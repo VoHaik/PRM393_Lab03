@@ -54,6 +54,13 @@ class ApiClient {
       }
     }
 
+    // Add automatic retry mechanism for HTTP 429 (Rate Limiting)
+    dio.interceptors.add(RetryOnRateLimitInterceptor(
+      dio: dio,
+      maxRetries: 3,
+      initialDelay: const Duration(milliseconds: 1000),
+    ));
+
     // Add logger interceptor for debugging in development
     dio.interceptors.add(LogInterceptor(
       requestHeader: false,
@@ -76,5 +83,49 @@ class ApiClient {
     } on DioException catch (e) {
       throw Exception(e.message ?? 'Unknown network error');
     }
+  }
+}
+
+/// Custom Interceptor that catches HTTP 429 (Too Many Requests) rate limit responses
+/// and retries the request using Exponential Backoff.
+class RetryOnRateLimitInterceptor extends Interceptor {
+  final Dio dio;
+  final int maxRetries;
+  final Duration initialDelay;
+
+  RetryOnRateLimitInterceptor({
+    required this.dio,
+    this.maxRetries = 3,
+    this.initialDelay = const Duration(milliseconds: 1000),
+  });
+
+  @override
+  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
+    final requestOptions = err.requestOptions;
+    final response = err.response;
+    final int retryCount = requestOptions.extra['retry_count'] ?? 0;
+
+    // Retry only if response status is HTTP 429 and we haven't reached max retries
+    if (response != null && response.statusCode == 429 && retryCount < maxRetries) {
+      requestOptions.extra['retry_count'] = retryCount + 1;
+      
+      // Calculate delay with Exponential Backoff (1s, 2s, 4s...)
+      final delay = initialDelay * (1 << retryCount);
+      
+      debugPrint('[API Client] HTTP 429 Rate Limited on ${requestOptions.uri}. '
+          'Retrying in ${delay.inMilliseconds}ms (Attempt ${retryCount + 1}/$maxRetries)...');
+      
+      await Future.delayed(delay);
+      
+      try {
+        // Fetch the request again
+        final response = await dio.fetch(requestOptions);
+        return handler.resolve(response);
+      } on DioException catch (retryErr) {
+        return handler.next(retryErr);
+      }
+    }
+    
+    return handler.next(err);
   }
 }
