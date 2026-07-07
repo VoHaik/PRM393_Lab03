@@ -24,6 +24,11 @@ dependencies:
   provider: ^6.1.2
   get_it: ^7.6.0
 
+  # Firebase Services
+  firebase_core: ^2.32.0
+  firebase_auth: ^4.20.0
+  google_sign_in: ^6.2.1
+
   # Networking & Caching
   dio: ^5.4.0
   dio_cache_interceptor: ^3.4.4
