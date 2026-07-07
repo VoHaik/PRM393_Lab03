@@ -14,12 +14,13 @@ This file acts as the primary "knowledge base" for the Journal Trend Analyzer pr
   * User Authentication using Firebase Authentication with Google Sign-In and routing guards.
   * User activity event tracking using Firebase Analytics.
   * **Automatic Rate Limit Resiliency:** Implemented custom Dio interceptors (`RetryOnRateLimitInterceptor`) with Exponential Backoff and jitter, plus spaced request delays to prevent and recover from HTTP 429 rate limit errors.
+  * **Automated UI Testing:** Integrated Patrol UI testing framework for end-to-end integration tests using mock environments.
 
 ---
 
 ## 📁 Folder Structure & File Map
 
-### Current Layout (Post-Migration + Firebase Auth & Analytics)
+### Current Layout (Post-Migration + Firebase Auth & Analytics & Patrol)
 
 * **`lib/models/` (Data Structures & Serialization)**
   * `publication.dart`: Represents a publication entity. Includes reconstruction algorithm for abstract inverted indices.
@@ -52,6 +53,10 @@ This file acts as the primary "knowledge base" for the Journal Trend Analyzer pr
   * `network/api_client.dart`: Caching Dio network client wrapper using Hive store. Includes `RetryOnRateLimitInterceptor` to handle and recover from HTTP 429 errors.
   * `error/exceptions.dart`: Standard server/cache/network exception definitions.
   * `abstract_parser.dart`: OpenAlex inverted abstract index parser utility.
+* **`integration_test/` (Automated UI Integration Tests)**
+  * `mock_services.dart`: Implements MockAuthService and MockAnalyticsService for offline test environments.
+  * `auth_flow_test.dart`: Patrol E2E test verifying authentication flow, navigation shell, profile view, and session sign out.
+  * `analytics_flow_test.dart`: Patrol E2E test verifying that user log in, searches, and log out trigger correct analytics logging hooks.
 * **`build_apk.bat`** (Root folder)
   * Automation script to clean cache, get packages, and compile Release APK for Android on Windows.
 * **`docs/plans/`**
@@ -68,16 +73,16 @@ This log lists all plans that have been proposed, are in progress, or are comple
 | **01** | Refactoring to MVVM + Provider | [01_migration_to_mvvm_provider_plan.md](file:///c:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/01_migration_to_mvvm_provider_plan.md) | **Completed** | 2026-07-07 |
 | **02** | Firebase Authentication Integration | [02_firebase_authentication_plan.md](file:///c:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/02_firebase_authentication_plan.md) | **Completed** | 2026-07-07 |
 | **03** | Firebase Analytics Integration | [03_firebase_analytics_plan.md](file:///c:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/03_firebase_analytics_plan.md) | **Completed** | 2026-07-07 |
+| **04** | Patrol Testing Integration | [04_patrol_testing_plan.md](file:///c:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/04_patrol_testing_plan.md) | **Completed** | 2026-07-07 |
 
 ---
 
 ## 📋 Active Implementation State
 
-Firebase Authentication (Google Sign-In) and Firebase Analytics are 100% integrated. The project features redirection guards and logs 7 required activity events. The code is error-free under `flutter analyze` and all unit tests pass successfully.
+Firebase Authentication (Google Sign-In), Firebase Analytics, and Patrol UI testing are 100% integrated. The project features redirection guards, logs 7 required activity events, and contains 2 Patrol integration tests in `integration_test/`. The code is error-free under `flutter analyze` and all unit tests pass successfully.
 A `build_apk.bat` automation helper script is added at the root. Android application display name and Web tab headers are corrected to `Journal Trend Analyzer` for display compatibility.
 The API client features a rate-limit retry mechanism to automatically resolve HTTP 429 errors.
 
 Next steps will involve:
 1. Setting up **Firebase Storage** for PDF report export.
 2. Implementing the remaining required views (Journal List, Journal Detail, Keyword Detail).
-3. Writing E2E integration test scripts using the **Patrol** testing framework.
