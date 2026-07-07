@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:journal_trend_analyzer/core/utils/abstract_parser.dart';
+import 'package:journal_trend_analyzer/utils/abstract_parser.dart';
 
 void main() {
   group('AbstractParser', () {

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'core/navigation/router.dart';
-import 'core/theme/app_theme.dart';
+import 'package:provider/provider.dart';
+import 'utils/navigation/router.dart';
+import 'utils/theme/app_theme.dart';
 import 'injection_container.dart' as di;
-import 'presentation/bloc/analysis/analysis_bloc.dart';
-import 'presentation/bloc/dashboard/dashboard_bloc.dart';
-import 'presentation/bloc/detail/detail_bloc.dart';
-import 'presentation/bloc/search/search_bloc.dart';
+import 'viewmodels/analysis_viewmodel.dart';
+import 'viewmodels/dashboard_viewmodel.dart';
+import 'viewmodels/detail_viewmodel.dart';
+import 'viewmodels/search_viewmodel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,19 +22,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    return MultiProvider(
       providers: [
-        BlocProvider<SearchBloc>(
-          create: (_) => di.sl<SearchBloc>(),
+        ChangeNotifierProvider<SearchViewModel>(
+          create: (_) => di.sl<SearchViewModel>(),
         ),
-        BlocProvider<DetailBloc>(
-          create: (_) => di.sl<DetailBloc>(),
+        ChangeNotifierProvider<DetailViewModel>(
+          create: (_) => di.sl<DetailViewModel>(),
         ),
-        BlocProvider<AnalysisBloc>(
-          create: (_) => di.sl<AnalysisBloc>(),
+        ChangeNotifierProvider<AnalysisViewModel>(
+          create: (_) => di.sl<AnalysisViewModel>(),
         ),
-        BlocProvider<DashboardBloc>(
-          create: (_) => di.sl<DashboardBloc>(),
+        ChangeNotifierProvider<DashboardViewModel>(
+          create: (_) => di.sl<DashboardViewModel>(),
         ),
       ],
       child: MaterialApp.router(
