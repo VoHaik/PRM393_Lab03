@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import '../models/publication.dart';
 import '../services/openalex_service.dart';
+import '../services/analytics_service.dart';
 
 class SearchViewModel extends ChangeNotifier {
   final OpenAlexService openAlexService;
+  final AnalyticsService analyticsService;
 
-  SearchViewModel({required this.openAlexService});
+  SearchViewModel({
+    required this.openAlexService,
+    required this.analyticsService,
+  });
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -31,6 +36,9 @@ class SearchViewModel extends ChangeNotifier {
     _errorMessage = null;
     _keyword = trimmedKeyword;
     notifyListeners();
+
+    // Log the search topic activity
+    analyticsService.logSearchTopic(trimmedKeyword);
 
     try {
       _publications = await openAlexService.searchPublications(trimmedKeyword);

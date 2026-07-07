@@ -2,12 +2,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth_service.dart';
+import '../services/analytics_service.dart';
 
 class AuthViewModel extends ChangeNotifier {
   final AuthService authService;
+  final AnalyticsService analyticsService;
   StreamSubscription<User?>? _authSubscription;
 
-  AuthViewModel({required this.authService}) {
+  AuthViewModel({
+    required this.authService,
+    required this.analyticsService,
+  }) {
     _user = authService.currentUser;
     _authSubscription = authService.authStateChanges.listen((User? user) {
       _user = user;
@@ -31,6 +36,10 @@ class AuthViewModel extends ChangeNotifier {
 
     try {
       final credential = await authService.signInWithGoogle();
+      if (credential != null) {
+        // Log successful login event
+        await analyticsService.logLogin();
+      }
       _isLoading = false;
       notifyListeners();
       return credential != null; // return true if login succeeded, false if user cancelled
@@ -49,6 +58,8 @@ class AuthViewModel extends ChangeNotifier {
 
     try {
       await authService.signOut();
+      // Log logout event
+      await analyticsService.logLogout();
     } catch (e) {
       _errorMessage = e.toString().replaceAll('Exception: ', '');
     } finally {
