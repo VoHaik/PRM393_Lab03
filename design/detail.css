@@ -1,0 +1,129 @@
+/* Details screen styles */
+.detail-header-card {
+    background: rgba(30, 41, 59, 0.5);
+    margin-bottom: 24px;
+}
+
+.detail-top-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.detail-title {
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.4;
+    color: var(--text-primary);
+}
+
+.section-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.detail-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 24px;
+}
+
+.meta-row {
+    display: flex;
+    margin-bottom: 10px;
+    font-size: 13px;
+    align-items: flex-start;
+}
+
+.meta-row i {
+    width: 20px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.meta-key {
+    width: 90px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.meta-val {
+    flex: 1;
+    color: var(--text-primary);
+}
+
+.authors-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.author-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+}
+
+.author-icon {
+    color: var(--accent-violet);
+    font-size: 12px;
+}
+
+.author-name {
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.author-orcid {
+    font-size: 10px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.abstract-box {
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+.doi-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px;
+    background: var(--accent-cyan);
+    color: #000;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    text-decoration: none;
+    margin-top: 24px;
+    transition: transform var(--transition-speed);
+}
+
+.doi-btn:hover {
+    transform: scale(0.98);
+}
+
+.back-btn {
+    text-decoration: none;
+    color: var(--accent-cyan);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}

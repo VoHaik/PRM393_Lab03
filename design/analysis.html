@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal Trend Analyzer - Trend Analysis Mockup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="analysis.css">
+</head>
+<body>
+    <div class="container">
+        <!-- App Header -->
+        <div class="app-header">
+            <i class="fa-solid fa-chart-line" style="color: var(--accent-cyan); font-size: 24px;"></i>
+            <span class="app-title-gradient">Publication Trends</span>
+        </div>
+        <p class="sub-title">Yearly growth trends of publications</p>
+
+        <!-- Main analysis scroll body -->
+        <div class="analysis-scroll">
+            
+            <div class="keyword-tag">Keyword: Artificial Intelligence</div>
+
+            <!-- Peak Year Card -->
+            <div class="glass-card peak-card">
+                <div class="peak-icon-container">
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+                <div>
+                    <div class="peak-meta-title">Peak Research Year</div>
+                    <div class="peak-meta-value">2023 (1,280 publications)</div>
+                </div>
+            </div>
+
+            <!-- Swipable Diagram Carousel -->
+            <div class="carousel-container">
+                <button class="carousel-btn prev-btn" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
+                
+                <div class="carousel-track-wrapper">
+                    <div class="carousel-track" id="carouselTrack">
+                        
+                        <!-- Slide 1: Publication Trend (No 1) -->
+                        <div class="carousel-slide">
+                            <div class="diagram-info">
+                                <h3 class="diagram-title">Publication Trend</h3>
+                                <p class="diagram-topic">Artificial Intelligence</p>
+                            </div>
+                            <div class="glass-card chart-box">
+                                <svg class="chart-svg" viewBox="0 0 400 220">
+                                    <defs>
+                                        <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" stop-color="var(--accent-cyan)" />
+                                            <stop offset="100%" stop-color="var(--accent-violet)" />
+                                        </linearGradient>
+                                        <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="var(--accent-cyan)" stop-opacity="0.2" />
+                                            <stop offset="100%" stop-color="var(--accent-violet)" stop-opacity="0.01" />
+                                        </linearGradient>
+                                    </defs>
+                                    <line x1="40" y1="30" x2="380" y2="30" stroke="#1e293b" stroke-dasharray="4" />
+                                    <line x1="40" y1="80" x2="380" y2="80" stroke="#1e293b" stroke-dasharray="4" />
+                                    <line x1="40" y1="130" x2="380" y2="130" stroke="#1e293b" stroke-dasharray="4" />
+                                    <line x1="40" y1="180" x2="380" y2="180" stroke="#334155" />
+                                    <text x="30" y="34" text-anchor="end" class="chart-axis-label">1500</text>
+                                    <text x="30" y="84" text-anchor="end" class="chart-axis-label">1000</text>
+                                    <text x="30" y="134" text-anchor="end" class="chart-axis-label">500</text>
+                                    <text x="30" y="184" text-anchor="end" class="chart-axis-label">0</text>
+                                    <text x="40" y="202" text-anchor="middle" class="chart-axis-label">2018</text>
+                                    <text x="125" y="202" text-anchor="middle" class="chart-axis-label">2019</text>
+                                    <text x="210" y="202" text-anchor="middle" class="chart-axis-label">2020</text>
+                                    <text x="295" y="202" text-anchor="middle" class="chart-axis-label">2021</text>
+                                    <text x="380" y="202" text-anchor="middle" class="chart-axis-label">2022</text>
+                                    <path d="M 40 180 L 40 160 Q 80 130 125 140 T 210 110 T 295 70 T 380 40 L 380 180 Z" fill="url(#areaGrad)" />
+                                    <path d="M 40 160 Q 80 130 125 140 T 210 110 T 295 70 T 380 40" fill="none" stroke="url(#lineGrad)" stroke-width="4" stroke-linecap="round" />
+                                    <circle cx="40" cy="160" r="5" fill="var(--accent-cyan)" stroke="#0f172a" stroke-width="2" />
+                                    <circle cx="125" cy="140" r="5" fill="var(--accent-cyan)" stroke="#0f172a" stroke-width="2" />
+                                    <circle cx="210" cy="110" r="5" fill="#5885ec" stroke="#0f172a" stroke-width="2" />
+                                    <circle cx="295" cy="70" r="5" fill="var(--accent-violet)" stroke="#0f172a" stroke-width="2" />
+                                    <circle cx="380" cy="40" r="5" fill="var(--accent-violet)" stroke="#0f172a" stroke-width="2" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Slide 2: Top Keywords (No 3) -->
+                        <div class="carousel-slide">
+                            <div class="diagram-info">
+                                <h3 class="diagram-title">Top Keywords</h3>
+                                <p class="diagram-topic">Artificial Intelligence</p>
+                            </div>
+                            <div class="glass-card chart-box">
+                                <div class="horizontal-bars-container">
+                                    <!-- Row 1 -->
+                                    <div class="bar-row">
+                                        <div class="bar-header">
+                                            <span class="bar-name">Machine Learning</span>
+                                            <span class="bar-count">452 papers</span>
+                                        </div>
+                                        <div class="bar-track">
+                                            <div class="bar-fill" style="width: 95%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Row 2 -->
+                                    <div class="bar-row">
+                                        <div class="bar-header">
+                                            <span class="bar-name">Neural Networks</span>
+                                            <span class="bar-count">389 papers</span>
+                                        </div>
+                                        <div class="bar-track">
+                                            <div class="bar-fill" style="width: 82%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Row 3 -->
+                                    <div class="bar-row">
+                                        <div class="bar-header">
+                                            <span class="bar-name">Computer Vision</span>
+                                            <span class="bar-count">241 papers</span>
+                                        </div>
+                                        <div class="bar-track">
+                                            <div class="bar-fill" style="width: 55%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Row 4 -->
+                                    <div class="bar-row">
+                                        <div class="bar-header">
+                                            <span class="bar-name">Natural Language Processing</span>
+                                            <span class="bar-count">198 papers</span>
+                                        </div>
+                                        <div class="bar-track">
+                                            <div class="bar-fill" style="width: 44%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3: Author Impact (No 7) -->
+                        <div class="carousel-slide">
+                            <div class="diagram-info">
+                                <h3 class="diagram-title">Author Impact</h3>
+                                <p class="diagram-topic">Artificial Intelligence</p>
+                            </div>
+                            <div class="glass-card chart-box">
+                                <div class="horizontal-bars-container">
+                                    <!-- Row 1 -->
+                                    <div class="bar-row">
+                                        <div class="bar-header">
+                                            <span class="bar-name">Yoshua Bengio</span>
+                                            <span class="bar-count">32 publications</span>
+                                        </div>
+                                        <div class="bar-track">
+                                            <div class="bar-fill" style="width: 100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Row 2 -->
+                                    <div class="bar-row">
+                                        <div class="bar-header">
+                                            <span class="bar-name">Geoffrey Hinton</span>
+                                            <span class="bar-count">28 publications</span>
+                                        </div>
+                                        <div class="bar-track">
+                                            <div class="bar-fill" style="width: 88%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Row 3 -->
+                                    <div class="bar-row">
+                                        <div class="bar-header">
+                                            <span class="bar-name">Yann LeCun</span>
+                                            <span class="bar-count">24 publications</span>
+                                        </div>
+                                        <div class="bar-track">
+                                            <div class="bar-fill" style="width: 75%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Row 4 -->
+                                    <div class="bar-row">
+                                        <div class="bar-header">
+                                            <span class="bar-name">Andrew Ng</span>
+                                            <span class="bar-count">19 publications</span>
+                                        </div>
+                                        <div class="bar-track">
+                                            <div class="bar-fill" style="width: 60%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <button class="carousel-btn next-btn" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+
+            <!-- Dots Indicator -->
+            <div class="carousel-dots">
+                <div class="dot active" data-index="0"></div>
+                <div class="dot" data-index="1"></div>
+                <div class="dot" data-index="2"></div>
+            </div>
+
+        </div>
+
+        <!-- Emulator Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="search.html" class="nav-item">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>Search</span>
+            </a>
+            <a href="analysis.html" class="nav-item active">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Trends</span>
+            </a>
+            <a href="dashboard.html" class="nav-item">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Dashboard</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Script to implement the looping carousel -->
+    <script>
+        const track = document.getElementById('carouselTrack');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dots = document.querySelectorAll('.dot');
+        let currentIndex = 0;
+        const totalSlides = 3;
+
+        function updateCarousel(index) {
+            // Infinite loop logic
+            if (index >= totalSlides) {
+                currentIndex = 0;
+            } else if (index < 0) {
+                currentIndex = totalSlides - 1;
+            } else {
+                currentIndex = index;
+            }
+
+            // Translate track
+            const offset = -currentIndex * 33.3333;
+            track.style.transform = `translateX(${offset}%)`;
+
+            // Update dots
+            dots.forEach((dot, idx) => {
+                if (idx === currentIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            updateCarousel(currentIndex - 1);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            updateCarousel(currentIndex + 1);
+        });
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                const targetIdx = parseInt(e.target.getAttribute('data-index'));
+                updateCarousel(targetIdx);
+            });
+        });
+
+        // Optional swipe gestures simulation for mobile feel
+        let startX = 0;
+        let endX = 0;
+
+        track.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+
+        track.addEventListener('touchend', (e) => {
+            endX = e.changedTouches[0].clientX;
+            if (startX - endX > 50) {
+                // Swipe Left -> next
+                updateCarousel(currentIndex + 1);
+            } else if (endX - startX > 50) {
+                // Swipe Right -> prev
+                updateCarousel(currentIndex - 1);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom
+.buildlog/
+.history
+.svn
+migrate_working_dir/
+
+# IntelliJ Related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Visual Studio Code Related
+.vscode/
+
+# Flutter/Dart Related
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+lib/generated/
+
+# Android Related
+android/app/src/main/res/values/strings.xml
+android/local.properties
+android/key.properties
+*.keystore
+*.jks
