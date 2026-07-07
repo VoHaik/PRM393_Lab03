@@ -26,16 +26,24 @@ class _SearchScreenState extends State<SearchScreen> {
     'Data Science',
   ];
 
-  void _triggerSearch(String keyword) {
-    if (keyword.trim().isEmpty) return;
-    _searchController.text = keyword;
+  void _triggerSearch(String keyword) async {
+    final trimmedKeyword = keyword.trim();
+    if (trimmedKeyword.isEmpty) return;
+    _searchController.text = trimmedKeyword;
     
     // Dispatch search
-    context.read<SearchViewModel>().searchTopic(keyword);
+    await context.read<SearchViewModel>().searchTopic(trimmedKeyword);
     
-    // Proactively pre-fetch trends and dashboard for this keyword to avoid loading delay when switching tabs
-    context.read<AnalysisViewModel>().fetchAnalysis(keyword);
-    context.read<DashboardViewModel>().fetchDashboard(keyword);
+    if (!mounted) return;
+    
+    // Proactively pre-fetch trends and dashboard with sequential delays to avoid HTTP 429 (Too Many Requests)
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (!mounted) return;
+    context.read<AnalysisViewModel>().fetchAnalysis(trimmedKeyword);
+    
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (!mounted) return;
+    context.read<DashboardViewModel>().fetchDashboard(trimmedKeyword);
   }
 
   @override

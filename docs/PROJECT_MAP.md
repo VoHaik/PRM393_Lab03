@@ -13,6 +13,7 @@ This file acts as the primary "knowledge base" for the Journal Trend Analyzer pr
   * Real-time academic publication and trend analysis using the OpenAlex API. Offline caching with Dio + Hive.
   * User Authentication using Firebase Authentication with Google Sign-In and routing guards.
   * User activity event tracking using Firebase Analytics.
+  * **Automatic Rate Limit Resiliency:** Implemented custom Dio interceptors (`RetryOnRateLimitInterceptor`) with Exponential Backoff and jitter, plus spaced request delays to prevent and recover from HTTP 429 rate limit errors.
 
 ---
 
@@ -37,7 +38,7 @@ This file acts as the primary "knowledge base" for the Journal Trend Analyzer pr
   * `auth_viewmodel.dart`: Manages session user states, loading states, and login/logout trigger events. Integrates login and logout event tracking.
 * **`lib/screens/` (Views / UI Layouts)**
   * `login_screen.dart`: Gateway screen for user authentication using Google Account.
-  * `search_screen.dart`: Main topic search input and publication results list.
+  * `search_screen.dart`: Main topic search input and publication results list. Uses staggered request delays to reduce API load spikes.
   * `analysis_screen.dart`: Carousel of charts (trend charts, top keywords, author rankings).
   * `dashboard_screen.dart`: Summary cards and top source lists.
   * `detail_screen.dart`: Single publication details (StatefulWidget) showing meta information and reconstructed abstract. Integrates view_publication event tracking.
@@ -48,7 +49,7 @@ This file acts as the primary "knowledge base" for the Journal Trend Analyzer pr
   * `constants/api_constants.dart`: OpenAlex API URL and polite pool user-agent details.
   * `navigation/router.dart`: Router mapping using GoRouter. Includes Redirect Guard (requires authentication for access to app features).
   * `theme/app_theme.dart`: Neon orange light theme and design styles.
-  * `network/api_client.dart`: Caching Dio network client wrapper using Hive store.
+  * `network/api_client.dart`: Caching Dio network client wrapper using Hive store. Includes `RetryOnRateLimitInterceptor` to handle and recover from HTTP 429 errors.
   * `error/exceptions.dart`: Standard server/cache/network exception definitions.
   * `abstract_parser.dart`: OpenAlex inverted abstract index parser utility.
 * **`build_apk.bat`** (Root folder)
@@ -74,6 +75,7 @@ This log lists all plans that have been proposed, are in progress, or are comple
 
 Firebase Authentication (Google Sign-In) and Firebase Analytics are 100% integrated. The project features redirection guards and logs 7 required activity events. The code is error-free under `flutter analyze` and all unit tests pass successfully.
 A `build_apk.bat` automation helper script is added at the root. Android application display name and Web tab headers are corrected to `Journal Trend Analyzer` for display compatibility.
+The API client features a rate-limit retry mechanism to automatically resolve HTTP 429 errors.
 
 Next steps will involve:
 1. Setting up **Firebase Storage** for PDF report export.
