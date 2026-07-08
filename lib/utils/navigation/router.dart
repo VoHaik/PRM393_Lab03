@@ -4,6 +4,8 @@ import '../../models/publication.dart';
 import '../../screens/analysis_screen.dart';
 import '../../screens/dashboard_screen.dart';
 import '../../screens/detail_screen.dart';
+import '../../screens/keyword_detail_screen.dart';
+import '../../screens/keywords_screen.dart';
 import '../../screens/login_screen.dart';
 import '../../screens/profile_screen.dart';
 import '../../screens/search_screen.dart';
@@ -55,6 +57,10 @@ class AppRouter {
             },
           ),
           GoRoute(
+            path: '/keywords',
+            builder: (context, state) => const KeywordsScreen(),
+          ),
+          GoRoute(
             path: '/profile',
             builder: (context, state) => const ProfileScreen(),
           ),
@@ -65,6 +71,16 @@ class AppRouter {
         builder: (context, state) {
           final publication = state.extra as Publication;
           return DetailScreen(publication: publication);
+        },
+      ),
+      GoRoute(
+        path: '/keyword-detail',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? const {};
+          return KeywordDetailScreen(
+            keyword: extra['keyword']?.toString() ?? '',
+            count: extra['count'] as int? ?? 0,
+          );
         },
       ),
     ],
