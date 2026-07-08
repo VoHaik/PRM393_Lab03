@@ -1,29 +1,29 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import '../../models/publication.dart';
-import '../../screens/analysis_screen.dart';
-import '../../screens/dashboard_screen.dart';
 import '../../screens/detail_screen.dart';
 import '../../screens/keyword_detail_screen.dart';
 import '../../screens/keywords_screen.dart';
 import '../../screens/login_screen.dart';
 import '../../screens/profile_screen.dart';
-import '../../screens/search_screen.dart';
+import '../../screens/home_screen.dart';
+import '../../screens/journals_screen.dart';
+import '../../screens/journal_detail_screen.dart';
 import '../../widgets/main_shell.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/search',
+    initialLocation: '/home',
     redirect: (context, state) {
       final bool loggedIn = FirebaseAuth.instance.currentUser != null;
-      final bool loggingIn = state.uri.toString() == '/login';
+      final bool loggingIn = state.uri.path == '/login';
 
       if (!loggedIn) {
         return '/login';
       }
 
-      if (loggingIn) {
-        return '/search';
+      if (loggingIn || state.uri.path == '/') {
+        return '/home';
       }
 
       return null;
@@ -39,22 +39,12 @@ class AppRouter {
         },
         routes: [
           GoRoute(
-            path: '/search',
-            builder: (context, state) => const SearchScreen(),
+            path: '/home',
+            builder: (context, state) => const HomeScreen(),
           ),
           GoRoute(
-            path: '/analysis',
-            builder: (context, state) {
-              final keyword = state.uri.queryParameters['keyword'] ?? '';
-              return AnalysisScreen(keyword: keyword);
-            },
-          ),
-          GoRoute(
-            path: '/dashboard',
-            builder: (context, state) {
-              final keyword = state.uri.queryParameters['keyword'] ?? '';
-              return DashboardScreen(keyword: keyword);
-            },
+            path: '/journals',
+            builder: (context, state) => const JournalsScreen(),
           ),
           GoRoute(
             path: '/keywords',
@@ -80,6 +70,16 @@ class AppRouter {
           return KeywordDetailScreen(
             keyword: extra['keyword']?.toString() ?? '',
             count: extra['count'] as int? ?? 0,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/journal-detail',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? const {};
+          return JournalDetailScreen(
+            journalId: extra['journalId']?.toString() ?? '',
+            displayName: extra['displayName']?.toString() ?? '',
           );
         },
       ),

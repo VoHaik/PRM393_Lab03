@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../lib/screens/keyword_detail_screen.dart';
 import '../lib/screens/keywords_screen.dart';
-import '../lib/screens/search_screen.dart';
+import '../lib/screens/home_screen.dart';
 import '../lib/services/analytics_service.dart';
 import '../lib/viewmodels/analysis_viewmodel.dart';
 import '../lib/viewmodels/dashboard_viewmodel.dart';
@@ -46,7 +46,7 @@ void main() {
               create: (_) => KeywordViewModel(openAlexService: openAlex),
             ),
           ],
-          child: const MaterialApp(home: SearchScreen()),
+          child: const MaterialApp(home: HomeScreen()),
         ),
       );
 

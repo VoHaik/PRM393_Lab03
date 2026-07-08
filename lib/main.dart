@@ -11,6 +11,8 @@ import 'viewmodels/detail_viewmodel.dart';
 import 'viewmodels/search_viewmodel.dart';
 import 'viewmodels/auth_viewmodel.dart';
 import 'viewmodels/keyword_viewmodel.dart';
+import 'viewmodels/journal_viewmodel.dart';
+import 'viewmodels/profile_viewmodel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +54,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<KeywordViewModel>(
           create: (_) => di.sl<KeywordViewModel>(),
+        ),
+        ChangeNotifierProvider<JournalViewModel>(
+          create: (_) => di.sl<JournalViewModel>(),
+        ),
+        ChangeNotifierProvider<ProfileViewModel>(
+          create: (_) => di.sl<ProfileViewModel>(),
         ),
       ],
       child: MaterialApp.router(

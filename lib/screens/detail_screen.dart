@@ -30,9 +30,7 @@ class _DetailScreenState extends State<DetailScreen> {
     if (url.isEmpty) return;
     final Uri uri = Uri.parse(url);
     try {
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      }
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (_) {
       // Handle error launching URL silently
     }

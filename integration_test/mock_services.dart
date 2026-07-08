@@ -1,14 +1,18 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:mocktail/mocktail.dart';
 import '../lib/models/analytics_summary.dart';
+import '../lib/models/journal_detail.dart';
 import '../lib/models/keyword_analytics.dart';
 import '../lib/models/keyword_detail.dart';
 import '../lib/models/publication.dart';
 import '../lib/services/auth_service.dart';
 import '../lib/services/analytics_service.dart';
 import '../lib/services/openalex_service.dart';
+import '../lib/services/storage_service.dart';
+import '../lib/services/report_service.dart';
 
 class FakeUser extends Fake implements User {
   @override
@@ -256,6 +260,54 @@ class MockOpenAlexService implements OpenAlexService {
       averageCitations: 42,
       peakYear: 2024,
     );
+  }
+
+  @override
+  Future<JournalDetailData> getJournalDetail(String journalId, String keyword) async {
+    return JournalDetailData(
+      id: journalId,
+      displayName: 'Mock Journal of AI',
+      publisher: 'Mock Publisher Corp',
+      worksCount: 120,
+      citedByCount: 4200,
+      averageCitations: 35.0,
+      relatedPublications: [
+        Publication(
+          id: 'W-journal-1',
+          title: 'Mock Related Journal Paper',
+          publicationYear: 2024,
+          citedByCount: 50,
+          doiUrl: '',
+          abstractText: 'Mock abstract text for related paper.',
+          authors: const [],
+        ),
+      ],
+    );
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class MockStorageService implements StorageService {
+  @override
+  Future<String> uploadPdfReport({
+    required String topic,
+    required Uint8List pdfBytes,
+    required String fileName,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    return 'https://firebasestorage.googleapis.com/v0/b/mock-bucket/o/reports%2Fmock_report.pdf?alt=media';
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class MockReportService implements ReportService {
+  @override
+  Future<Uint8List> generatePdfReport(AnalyticsSummary summary, String topic) async {
+    return Uint8List.fromList([1, 2, 3, 4]);
   }
 
   @override
