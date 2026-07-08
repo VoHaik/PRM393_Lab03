@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../injection_container.dart' as di;
 import '../services/analytics_service.dart';
 import '../utils/theme/app_theme.dart';
-import '../viewmodels/analysis_viewmodel.dart';
-import '../viewmodels/search_viewmodel.dart';
+import '../viewmodels/keyword_viewmodel.dart';
 
 class KeywordDetailScreen extends StatefulWidget {
   final String keyword;
@@ -27,12 +27,41 @@ class _KeywordDetailScreenState extends State<KeywordDetailScreen> {
   void initState() {
     super.initState();
     di.sl<AnalyticsService>().logViewKeyword(widget.keyword);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      context.read<KeywordViewModel>().loadDetail(widget.keyword);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final analysis = context.watch<AnalysisViewModel>();
-    final search = context.watch<SearchViewModel>();
+    final keywordModel = context.watch<KeywordViewModel>();
+    final detail = keywordModel.detail;
+
+    if (keywordModel.isDetailLoading && detail == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(color: AppTheme.primaryNeon),
+        ),
+      );
+    }
+
+    if (keywordModel.detailErrorMessage != null && detail == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Keyword Details'),
+        ),
+        body: Center(
+          child: Text(
+            keywordModel.detailErrorMessage!,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: AppTheme.accentRose),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -76,13 +105,13 @@ class _KeywordDetailScreenState extends State<KeywordDetailScreen> {
             const SizedBox(height: 20),
             _Section(
               title: 'Publication Trends',
-              child: _TrendList(trendData: analysis.trendData),
+              child: _TrendList(trendData: detail?.trendByYear ?? const {}),
             ),
             const SizedBox(height: 20),
             _Section(
               title: 'Related Journals',
               child: _GroupedList(
-                items: analysis.topJournals,
+                items: detail?.relatedJournals ?? const [],
                 emptyMessage: 'No related journals available.',
                 countLabel: 'publications',
               ),
@@ -91,7 +120,7 @@ class _KeywordDetailScreenState extends State<KeywordDetailScreen> {
             _Section(
               title: 'Top Authors',
               child: _GroupedList(
-                items: analysis.topAuthors,
+                items: detail?.topAuthors ?? const [],
                 emptyMessage: 'No author ranking available.',
                 countLabel: 'works',
               ),
@@ -99,33 +128,36 @@ class _KeywordDetailScreenState extends State<KeywordDetailScreen> {
             const SizedBox(height: 20),
             _Section(
               title: 'Related Publications',
-              child: search.publications.isEmpty
+              child: (detail?.relatedPublications ?? const []).isEmpty
                   ? const Text(
                       'No related publications available.',
                       style: TextStyle(color: AppTheme.textSecondary),
                     )
                   : Column(
-                      children: search.publications.take(5).map((publication) {
+                      children: (detail?.relatedPublications ?? const []).take(5).map((publication) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const FaIcon(FontAwesomeIcons.bookOpen, size: 13, color: AppTheme.primaryNeon),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  publication.title,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: AppTheme.textPrimary,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
+                          child: InkWell(
+                            onTap: () => context.push('/detail', extra: publication),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const FaIcon(FontAwesomeIcons.bookOpen, size: 13, color: AppTheme.primaryNeon),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    publication.title,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      color: AppTheme.textPrimary,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       }).toList(),

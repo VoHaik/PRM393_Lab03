@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 import 'utils/navigation/router.dart';
 import 'utils/theme/app_theme.dart';
+import 'utils/app_config.dart';
 import 'injection_container.dart' as di;
 import 'viewmodels/analysis_viewmodel.dart';
 import 'viewmodels/dashboard_viewmodel.dart';
 import 'viewmodels/detail_viewmodel.dart';
 import 'viewmodels/search_viewmodel.dart';
 import 'viewmodels/auth_viewmodel.dart';
+import 'viewmodels/keyword_viewmodel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  final config = await AppConfig.load();
+
   // Initialize Firebase
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: config.firebaseOptions,
   );
 
   // Initialize dependency injection
-  await di.init();
+  await di.init(config);
 
   runApp(const MyApp());
 }
@@ -46,6 +49,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<DashboardViewModel>(
           create: (_) => di.sl<DashboardViewModel>(),
+        ),
+        ChangeNotifierProvider<KeywordViewModel>(
+          create: (_) => di.sl<KeywordViewModel>(),
         ),
       ],
       child: MaterialApp.router(

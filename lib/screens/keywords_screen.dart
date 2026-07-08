@@ -3,8 +3,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../models/keyword_analytics.dart';
 import '../utils/theme/app_theme.dart';
-import '../viewmodels/analysis_viewmodel.dart';
+import '../viewmodels/keyword_viewmodel.dart';
 
 class KeywordsScreen extends StatelessWidget {
   const KeywordsScreen({super.key});
@@ -37,9 +38,9 @@ class KeywordsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Expanded(
-                child: Consumer<AnalysisViewModel>(
+                child: Consumer<KeywordViewModel>(
                   builder: (context, model, child) {
-                    if (model.keyword.isEmpty && !model.isLoading && model.errorMessage == null) {
+                    if (model.topic.isEmpty && !model.isLoading && model.errorMessage == null) {
                       return const _EmptyState(
                         icon: FontAwesomeIcons.magnifyingGlassChart,
                         message: 'Search for a topic first to view keyword analytics.',
@@ -62,7 +63,7 @@ class KeywordsScreen extends StatelessWidget {
                       );
                     }
 
-                    final keywords = _validKeywords(model.topKeywords);
+                    final keywords = model.keywords;
                     if (keywords.isEmpty) {
                       return const _EmptyState(
                         icon: FontAwesomeIcons.tags,
@@ -70,51 +71,45 @@ class KeywordsScreen extends StatelessWidget {
                       );
                     }
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    return ListView(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: AppTheme.primaryNeon.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: AppTheme.primaryNeon.withValues(alpha: 0.3)),
-                          ),
-                          child: Text(
-                            'Topic: ${model.keyword}',
-                            style: const TextStyle(
-                              color: AppTheme.primaryNeon,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
+                        _TopicChip(topic: model.topic),
+                        const SizedBox(height: 16),
+                        const _SectionTitle('Most Frequent Keywords'),
+                        ...List.generate(
+                          model.mostFrequentKeywords.length,
+                          (index) => Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
+                            child: _KeywordCard(
+                              rank: index + 1,
+                              keyword: model.mostFrequentKeywords[index],
                             ),
                           ),
                         ),
-                        const SizedBox(height: 16),
-                        Expanded(
-                          child: ListView.separated(
-                            itemCount: keywords.length,
-                            separatorBuilder: (context, index) => const SizedBox(height: 12),
-                            itemBuilder: (context, index) {
-                              final keyword = keywords[index];
-                              final name = keyword['key_display_name']?.toString() ?? 'Unknown';
-                              final count = keyword['count'] as int? ?? 0;
-                              return _KeywordCard(
-                                rank: index + 1,
-                                name: name,
-                                count: count,
-                                onTap: () {
-                                  context.push(
-                                    '/keyword-detail',
-                                    extra: {
-                                      'keyword': name,
-                                      'count': count,
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ),
+                        const SizedBox(height: 8),
+                        const _SectionTitle('Trending Keywords'),
+                        ...model.trendingKeywords.take(3).map(
+                              (keyword) => Padding(
+                                padding: const EdgeInsets.only(bottom: 12.0),
+                                child: _TrendingKeywordCard(keyword: keyword),
+                              ),
+                            ),
+                        const SizedBox(height: 8),
+                        const _SectionTitle('Keyword Frequency Statistics'),
+                        ...model.mostFrequentKeywords.take(3).map(
+                              (keyword) => Padding(
+                                padding: const EdgeInsets.only(bottom: 12.0),
+                                child: _KeywordStatsCard(keyword: keyword),
+                              ),
+                            ),
+                        const SizedBox(height: 8),
+                        const _SectionTitle('Keyword Trend Charts'),
+                        ...model.mostFrequentKeywords.take(3).map(
+                              (keyword) => Padding(
+                                padding: const EdgeInsets.only(bottom: 12.0),
+                                child: _KeywordTrendPreview(keyword: keyword),
+                              ),
+                            ),
                       ],
                     );
                   },
@@ -127,25 +122,15 @@ class KeywordsScreen extends StatelessWidget {
     );
   }
 
-  static List<Map<String, dynamic>> _validKeywords(List<Map<String, dynamic>> source) {
-    return source.where((item) {
-      final name = item['key_display_name']?.toString().trim() ?? '';
-      return name.isNotEmpty && name.toLowerCase() != 'unknown';
-    }).toList();
-  }
 }
 
 class _KeywordCard extends StatelessWidget {
   final int rank;
-  final String name;
-  final int count;
-  final VoidCallback onTap;
+  final KeywordAnalytics keyword;
 
   const _KeywordCard({
     required this.rank,
-    required this.name,
-    required this.count,
-    required this.onTap,
+    required this.keyword,
   });
 
   @override
@@ -153,7 +138,15 @@ class _KeywordCard extends StatelessWidget {
     return Card(
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        onTap: onTap,
+        onTap: () {
+          context.push(
+            '/keyword-detail',
+            extra: {
+              'keyword': keyword.name,
+              'count': keyword.publicationCount,
+            },
+          );
+        },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
@@ -182,7 +175,7 @@ class _KeywordCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name,
+                      keyword.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -193,7 +186,7 @@ class _KeywordCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '$count publications',
+                      '${keyword.publicationCount} publications',
                       style: const TextStyle(
                         color: AppTheme.textSecondary,
                         fontSize: 12,
@@ -205,6 +198,170 @@ class _KeywordCard extends StatelessWidget {
               const Icon(Icons.chevron_right_rounded, color: AppTheme.primaryNeon),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TopicChip extends StatelessWidget {
+  final String topic;
+
+  const _TopicChip({required this.topic});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppTheme.primaryNeon.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppTheme.primaryNeon.withValues(alpha: 0.3)),
+      ),
+      child: Text(
+        'Topic: $topic',
+        style: const TextStyle(
+          color: AppTheme.primaryNeon,
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+class _SectionTitle extends StatelessWidget {
+  final String title;
+
+  const _SectionTitle(this.title);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+      ),
+    );
+  }
+}
+
+class _TrendingKeywordCard extends StatelessWidget {
+  final KeywordAnalytics keyword;
+
+  const _TrendingKeywordCard({required this.keyword});
+
+  @override
+  Widget build(BuildContext context) {
+    final growthPrefix = keyword.growth >= 0 ? '+' : '';
+    return Card(
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: const FaIcon(
+          FontAwesomeIcons.arrowTrendUp,
+          color: AppTheme.secondaryNeon,
+          size: 18,
+        ),
+        title: Text(
+          keyword.name,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          'Growth $growthPrefix${keyword.growth} publications',
+        ),
+        trailing: Text(
+          '${keyword.growthRate}%',
+          style: const TextStyle(
+            color: AppTheme.secondaryNeon,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _KeywordStatsCard extends StatelessWidget {
+  final KeywordAnalytics keyword;
+
+  const _KeywordStatsCard({required this.keyword});
+
+  @override
+  Widget build(BuildContext context) {
+    final growthPrefix = keyword.growth >= 0 ? '+' : '';
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              keyword.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text('${keyword.publicationCount} publications'),
+            Text('${keyword.percentage}% of matching topic publications'),
+            Text(
+              'Most active year: ${keyword.mostActiveYear == 0 ? 'N/A' : keyword.mostActiveYear}',
+            ),
+            Text('Growth: $growthPrefix${keyword.growth} publications'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _KeywordTrendPreview extends StatelessWidget {
+  final KeywordAnalytics keyword;
+
+  const _KeywordTrendPreview({required this.keyword});
+
+  @override
+  Widget build(BuildContext context) {
+    final years = keyword.trendByYear.keys.toList()..sort();
+    final recentYears = years.reversed.take(5).toList().reversed.toList();
+    final maxCount = keyword.trendByYear.values.isEmpty
+        ? 1
+        : keyword.trendByYear.values.reduce((a, b) => a > b ? a : b);
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              keyword.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            ...recentYears.map(
+              (year) {
+                final count = keyword.trendByYear[year] ?? 0;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Row(
+                    children: [
+                      SizedBox(width: 48, child: Text('$year')),
+                      Expanded(
+                        child: LinearProgressIndicator(
+                          value: maxCount == 0 ? 0 : count / maxCount,
+                          minHeight: 8,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text('$count'),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
