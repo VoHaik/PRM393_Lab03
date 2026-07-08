@@ -19,8 +19,8 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCcI_6dgnT8t1jktbPrDa6ScpBUZ_9dGBM',
-    appId: '1:736803003999:android:2bb76ba97974ddb86305ea',
+    apiKey: 'AIzaSyDB1HuCMlR3q83sHcMYomc7F6B2EHi2GEc',
+    appId: '1:736803003999:web:412d89deeb9cd11e6305ea',
     messagingSenderId: '736803003999',
     projectId: 'journal-trend-analyzer-7cd2e',
     authDomain: 'journal-trend-analyzer-7cd2e.firebaseapp.com',

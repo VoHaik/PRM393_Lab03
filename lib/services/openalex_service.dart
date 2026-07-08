@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import '../models/analytics_summary.dart';
 import '../models/author.dart';
 import '../models/journal.dart';
+import '../models/keyword_analytics.dart';
+import '../models/keyword_detail.dart';
 import '../models/publication.dart';
 import '../utils/network/api_client.dart';
 
@@ -141,6 +143,80 @@ class OpenAlexService {
       }
     } catch (e) {
       throw Exception('Get top keywords failed: $e');
+    }
+  }
+
+  Future<int> getWorksCount(String keyword) async {
+    try {
+      final response = await apiClient.get(
+        '/works',
+        queryParameters: {
+          'search': keyword,
+          'per_page': 1,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return response.data['meta']?['count'] as int? ?? 0;
+      } else {
+        throw Exception('Failed to get works count');
+      }
+    } catch (e) {
+      throw Exception('Get works count failed: $e');
+    }
+  }
+
+  Future<List<KeywordAnalytics>> getKeywordAnalytics(
+    String topic, {
+    int limit = 5,
+  }) async {
+    try {
+      final totalTopicPublications = await getWorksCount(topic);
+      final groupedKeywords = await getTopKeywords(topic);
+      final filteredKeywords = groupedKeywords.where((item) {
+        final name = item['key_display_name']?.toString().trim() ?? '';
+        return name.isNotEmpty && name.toLowerCase() != 'unknown';
+      }).take(limit).toList();
+
+      final analytics = <KeywordAnalytics>[];
+      for (final keyword in filteredKeywords) {
+        final name = keyword['key_display_name']?.toString() ?? '';
+        final trendByYear = await getPublicationsTrend(name);
+        analytics.add(
+          KeywordAnalytics(
+            id: keyword['key']?.toString() ?? '',
+            name: name,
+            publicationCount: keyword['count'] as int? ?? 0,
+            totalTopicPublications: totalTopicPublications,
+            trendByYear: trendByYear,
+          ),
+        );
+      }
+
+      return analytics;
+    } catch (e) {
+      throw Exception('Get keyword analytics failed: $e');
+    }
+  }
+
+  Future<KeywordDetailData> getKeywordDetail(String keyword) async {
+    try {
+      final results = await Future.wait([
+        getPublicationsTrend(keyword),
+        getTopJournals(keyword),
+        searchPublications(keyword),
+        getTopAuthors(keyword),
+      ]);
+
+      return KeywordDetailData(
+        keyword: keyword,
+        trendByYear: results[0] as Map<int, int>,
+        relatedJournals: results[1] as List<Map<String, dynamic>>,
+        relatedPublications: results[2] as List<Publication>,
+        topAuthors: results[3] as List<Map<String, dynamic>>,
+      );
+    } catch (e) {
+      throw Exception('Get keyword detail failed: $e');
     }
   }
 

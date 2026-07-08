@@ -8,6 +8,7 @@ import '../models/publication.dart';
 import '../viewmodels/search_viewmodel.dart';
 import '../viewmodels/analysis_viewmodel.dart';
 import '../viewmodels/dashboard_viewmodel.dart';
+import '../viewmodels/keyword_viewmodel.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -41,6 +42,10 @@ class _SearchScreenState extends State<SearchScreen> {
     if (!mounted) return;
     context.read<AnalysisViewModel>().fetchAnalysis(trimmedKeyword);
     
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (!mounted) return;
+    context.read<KeywordViewModel>().loadForTopic(trimmedKeyword);
+
     await Future.delayed(const Duration(milliseconds: 300));
     if (!mounted) return;
     context.read<DashboardViewModel>().fetchDashboard(trimmedKeyword);
