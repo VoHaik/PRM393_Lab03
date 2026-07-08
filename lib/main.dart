@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 import 'utils/navigation/router.dart';
 import 'utils/theme/app_theme.dart';
 import 'utils/app_config.dart';
@@ -20,7 +19,7 @@ void main() async {
 
   // Initialize Firebase
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: config.firebaseOptions,
   );
 
   // Initialize dependency injection
