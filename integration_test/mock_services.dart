@@ -2,8 +2,11 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:mocktail/mocktail.dart';
+import '../lib/models/analytics_summary.dart';
+import '../lib/models/publication.dart';
 import '../lib/services/auth_service.dart';
 import '../lib/services/analytics_service.dart';
+import '../lib/services/openalex_service.dart';
 
 class FakeUser extends Fake implements User {
   @override
@@ -109,4 +112,76 @@ class MockAnalyticsService implements AnalyticsService {
     loggedEvents.add('export_pdf');
     loggedParameters['export_pdf'] = {'topic': topic};
   }
+}
+
+class MockOpenAlexService implements OpenAlexService {
+  @override
+  Future<List<Publication>> searchPublications(String keyword) async {
+    return [
+      Publication(
+        id: 'W1',
+        title: '$keyword Research Paper',
+        publicationYear: 2024,
+        citedByCount: 42,
+        doiUrl: '',
+        abstractText: 'A deterministic publication for Patrol tests.',
+        authors: const [],
+      ),
+    ];
+  }
+
+  @override
+  Future<Map<int, int>> getPublicationsTrend(String keyword) async {
+    return {2022: 3, 2023: 8, 2024: 12};
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getTopKeywords(String keyword) async {
+    return [
+      {
+        'key': 'https://openalex.org/T1',
+        'key_display_name': 'Machine Learning',
+        'count': 12,
+      },
+      {
+        'key': 'https://openalex.org/T2',
+        'key_display_name': 'Deep Learning',
+        'count': 8,
+      },
+    ];
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getTopAuthors(String keyword) async {
+    return [
+      {
+        'key': 'https://openalex.org/A1',
+        'key_display_name': 'Jane Researcher',
+        'count': 5,
+      },
+    ];
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getTopJournals(String keyword) async {
+    return [
+      {
+        'key': 'https://openalex.org/S1',
+        'key_display_name': 'Journal of AI',
+        'count': 6,
+      },
+    ];
+  }
+
+  @override
+  Future<AnalyticsSummary> getAnalyticsSummary(String keyword) async {
+    return const AnalyticsSummary(
+      totalPublications: 1,
+      averageCitations: 42,
+      peakYear: 2024,
+    );
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

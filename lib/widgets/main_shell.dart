@@ -12,7 +12,8 @@ class MainShell extends StatelessWidget {
     final String location = GoRouterState.of(context).uri.toString();
     if (location.startsWith('/analysis')) return 1;
     if (location.startsWith('/dashboard')) return 2;
-    if (location.startsWith('/profile')) return 3;
+    if (location.startsWith('/keywords') || location.startsWith('/keyword-detail')) return 3;
+    if (location.startsWith('/profile')) return 4;
     return 0; // Default to search
   }
 
@@ -28,6 +29,9 @@ class MainShell extends StatelessWidget {
         context.go('/dashboard');
         break;
       case 3:
+        context.go('/keywords');
+        break;
+      case 4:
         context.go('/profile');
         break;
     }
@@ -69,6 +73,10 @@ class MainShell extends StatelessWidget {
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.circleInfo, size: 18),
               label: 'Dashboard',
+            ),
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.tags, size: 18),
+              label: 'Keywords',
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.circleUser, size: 18),
