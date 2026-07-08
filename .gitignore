@@ -33,3 +33,8 @@ android/local.properties
 android/key.properties
 *.keystore
 *.jks
+
+# Secret Environment Files & Configuration
+.env.json
+!.vscode/launch.json
+android/app/google-services.json

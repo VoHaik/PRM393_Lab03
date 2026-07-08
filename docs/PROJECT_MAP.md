@@ -11,8 +11,8 @@ This file acts as the primary "knowledge base" for the Journal Trend Analyzer pr
 * **State Management:** Provider (`provider` package with ChangeNotifiers)
 * **Primary Features:** 
   * Real-time academic publication and trend analysis using the OpenAlex API. Offline caching with Dio + Hive.
-  * User Authentication using Firebase Authentication with Google Sign-In and routing guards.
-  * User activity event tracking using Firebase Analytics.
+  * User Authentication using Firebase Authentication with Google Sign-In and routing guards (supports both Android and Web/Chrome).
+  * User activity event tracking using Firebase Analytics (supports both Android and Web/Chrome).
   * **Automatic Rate Limit Resiliency:** Implemented custom Dio interceptors (`RetryOnRateLimitInterceptor`) with Exponential Backoff and jitter, plus spaced request delays to prevent and recover from HTTP 429 rate limit errors.
   * **Automated UI Testing:** Integrated Patrol UI testing framework for end-to-end integration tests using mock environments.
 
@@ -20,7 +20,7 @@ This file acts as the primary "knowledge base" for the Journal Trend Analyzer pr
 
 ## 📁 Folder Structure & File Map
 
-### Current Layout (Post-Migration + Firebase Auth & Analytics & Patrol)
+### Current Layout (Post-Migration + Firebase Auth & Analytics & Patrol & Web Config)
 
 * **`lib/models/` (Data Structures & Serialization)**
   * `publication.dart`: Represents a publication entity. Includes reconstruction algorithm for abstract inverted indices.
@@ -29,7 +29,7 @@ This file acts as the primary "knowledge base" for the Journal Trend Analyzer pr
   * `analytics_summary.dart`: Represents aggregated dashboard statistics.
 * **`lib/services/` (Data Access Services)**
   * `openalex_service.dart`: Encapsulates all OpenAlex API HTTP requests, error mapping, and numerical analytics calculations.
-  * `auth_service.dart`: Encapsulates Firebase Authentication and Google Sign-In SDK functions.
+  * `auth_service.dart`: Encapsulates Firebase Authentication and Google Sign-In SDK functions (dynamically supports Android & Web OAuth clients).
   * `analytics_service.dart`: Encapsulates Firebase Analytics event tracking functions.
 * **`lib/viewmodels/` (Application State & Logic)**
   * `search_viewmodel.dart`: Coordinates user keyword searches and publication lists. Integrates search_topic event tracking.
@@ -42,12 +42,10 @@ This file acts as the primary "knowledge base" for the Journal Trend Analyzer pr
   * `search_screen.dart`: Main topic search input and publication results list. Uses staggered request delays to reduce API load spikes.
   * `analysis_screen.dart`: Carousel of charts (trend charts, top keywords, author rankings).
   * `dashboard_screen.dart`: Summary cards and top source lists.
-  * `keywords_screen.dart`: Dedicated Keywords tab showing top OpenAlex topic keywords for the current searched topic.
-  * `keyword_detail_screen.dart`: Keyword detail view showing selected keyword metrics, related trends, journals, authors, publications, and the `view_keyword` Analytics event.
   * `detail_screen.dart`: Single publication details (StatefulWidget) showing meta information and reconstructed abstract. Integrates view_publication event tracking.
   * `profile_screen.dart`: Shows signed-in user avatar/credentials, sign out, and placeholders for other Firebase SDK demos.
 * **`lib/widgets/` (Reusable View Components)**
-  * `main_shell.dart`: Navigation shell holding 5 navigation tabs (Search, Trends, Dashboard, Keywords, Profile).
+  * `main_shell.dart`: Navigation shell holding 4 navigation tabs (Search, Trends, Dashboard, Profile).
 * **`lib/utils/` (Configurations, Themes, Routers & Helpers)**
   * `constants/api_constants.dart`: OpenAlex API URL and polite pool user-agent details.
   * `navigation/router.dart`: Router mapping using GoRouter. Includes Redirect Guard (requires authentication for access to app features).
@@ -55,13 +53,16 @@ This file acts as the primary "knowledge base" for the Journal Trend Analyzer pr
   * `network/api_client.dart`: Caching Dio network client wrapper using Hive store. Includes `RetryOnRateLimitInterceptor` to handle and recover from HTTP 429 errors.
   * `error/exceptions.dart`: Standard server/cache/network exception definitions.
   * `abstract_parser.dart`: OpenAlex inverted abstract index parser utility.
+* **`lib/firebase_options.dart`** (Root lib folder)
+  * Dynamic Firebase configurations specifying distinct parameters for Android and Web environments.
 * **`integration_test/` (Automated UI Integration Tests)**
-  * `mock_services.dart`: Implements MockAuthService, MockAnalyticsService, and MockOpenAlexService for offline test environments.
+  * `mock_services.dart`: Implements MockAuthService and MockAnalyticsService for offline test environments.
   * `auth_flow_test.dart`: Patrol E2E test verifying authentication flow, navigation shell, profile view, and session sign out.
   * `analytics_flow_test.dart`: Patrol E2E test verifying that user log in, searches, and log out trigger correct analytics logging hooks.
-  * `keyword_flow_test.dart`: Patrol test source covering Lab 03 Test Case 2 (topic search), Test Case 6 (keywords navigation/content), and Test Case 7 (keyword details with `view_keyword`).
 * **`build_apk.bat`** (Root folder)
   * Automation script to clean cache, get packages, and compile Release APK for Android on Windows.
+* **`run_web.bat`** (Root folder)
+  * Helper script to launch the web client on Chrome with port 5000 locked.
 * **`docs/plans/`**
   * Contains historical, current, and future implementation plans, tasks, and walkthroughs.
 
@@ -77,16 +78,16 @@ This log lists all plans that have been proposed, are in progress, or are comple
 | **02** | Firebase Authentication Integration | [02_firebase_authentication_plan.md](file:///c:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/02_firebase_authentication_plan.md) | **Completed** | 2026-07-07 |
 | **03** | Firebase Analytics Integration | [03_firebase_analytics_plan.md](file:///c:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/03_firebase_analytics_plan.md) | **Completed** | 2026-07-07 |
 | **04** | Patrol Testing Integration | [04_patrol_testing_plan.md](file:///c:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/04_patrol_testing_plan.md) | **Completed** | 2026-07-07 |
-| **05** | Keywords Flow | [05_keywords_flow_plan.md](file:///D:/Class/SU26/PRM393/PRM393_Lab03/docs/plans/05_keywords_flow_plan.md) | **Completed** | 2026-07-08 |
+| **05** | Firebase Web Configuration | [05_firebase_web_plan.md](file:///c:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/05_firebase_web_plan.md) | **Completed** | 2026-07-08 |
 
 ---
 
 ## 📋 Active Implementation State
 
-Firebase Authentication (Google Sign-In), Firebase Analytics, and Patrol UI testing are integrated. The project features redirection guards, logs the required activity events, contains a dedicated Keywords tab and Keyword Detail flow, and includes Patrol test source for topic search, keywords navigation, and keyword details.
+Firebase Authentication (Google Sign-In), Firebase Analytics, and Patrol UI testing are 100% integrated on both Android and Web/Chrome platforms. The project features redirection guards, logs 7 required activity events, and contains 2 Patrol integration tests. The code is error-free under `flutter analyze` and all unit tests pass successfully.
 A `build_apk.bat` automation helper script is added at the root. Android application display name and Web tab headers are corrected to `Journal Trend Analyzer` for display compatibility.
 The API client features a rate-limit retry mechanism to automatically resolve HTTP 429 errors.
 
 Next steps will involve:
 1. Setting up **Firebase Storage** for PDF report export.
-2. Implementing the remaining required views (Journal List, Journal Detail).
+2. Implementing the remaining required views (Journal List, Journal Detail, Keyword Detail).
