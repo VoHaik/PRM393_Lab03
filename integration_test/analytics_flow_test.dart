@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
 import 'package:get_it/get_it.dart';
+import 'package:firebase_core/firebase_core.dart';
 import '../lib/main.dart';
 import '../lib/injection_container.dart' as di;
 import '../lib/services/auth_service.dart';
 import '../lib/services/analytics_service.dart';
+import '../lib/utils/app_config.dart';
 import 'mock_services.dart';
 
 void main() {
@@ -16,7 +18,26 @@ void main() {
     ($) async {
       // 1. Reset DI and register mocks
       await sl.reset();
-      await di.init();
+      
+      final mockConfig = AppConfig(
+        googleSignInWebClientId: 'mock_client_id',
+        webFirebaseOptions: const FirebaseOptions(
+          apiKey: 'mock_key',
+          appId: 'mock_app_id',
+          messagingSenderId: 'mock_sender_id',
+          projectId: 'mock_project_id',
+          authDomain: 'mock_auth_domain',
+          storageBucket: 'mock_storage_bucket',
+        ),
+        androidFirebaseOptions: const FirebaseOptions(
+          apiKey: 'mock_key',
+          appId: 'mock_app_id',
+          messagingSenderId: 'mock_sender_id',
+          projectId: 'mock_project_id',
+          storageBucket: 'mock_storage_bucket',
+        ),
+      );
+      await di.init(mockConfig);
       
       await sl.unregister<AuthService>();
       await sl.unregister<AnalyticsService>();

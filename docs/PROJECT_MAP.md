@@ -74,20 +74,26 @@ This log lists all plans that have been proposed, are in progress, or are comple
 
 | ID | Plan Name | Target File | Status | Date |
 | :--- | :--- | :--- | :---: | :--- |
-| **01** | Refactoring to MVVM + Provider | [01_migration_to_mvvm_provider_plan.md](file:///c:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/01_migration_to_mvvm_provider_plan.md) | **Completed** | 2026-07-07 |
-| **02** | Firebase Authentication Integration | [02_firebase_authentication_plan.md](file:///c:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/02_firebase_authentication_plan.md) | **Completed** | 2026-07-07 |
-| **03** | Firebase Analytics Integration | [03_firebase_analytics_plan.md](file:///c:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/03_firebase_analytics_plan.md) | **Completed** | 2026-07-07 |
-| **04** | Patrol Testing Integration | [04_patrol_testing_plan.md](file:///c:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/04_patrol_testing_plan.md) | **Completed** | 2026-07-07 |
-| **05** | Firebase Web Configuration | [05_firebase_web_plan.md](file:///c:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/05_firebase_web_plan.md) | **Completed** | 2026-07-08 |
+| **01** | Refactoring to MVVM + Provider | [01_migration_to_mvvm_provider_plan.md](file:///d:/PRM_CP3/docs/plans/01_migration_to_mvvm_provider_plan.md) | **Completed** | 2026-07-07 |
+| **02** | Firebase Authentication Integration | [02_firebase_authentication_plan.md](file:///d:/PRM_CP3/docs/plans/02_firebase_authentication_plan.md) | **Completed** | 2026-07-07 |
+| **03** | Firebase Analytics Integration | [03_firebase_analytics_plan.md](file:///d:/PRM_CP3/docs/plans/03_firebase_analytics_plan.md) | **Completed** | 2026-07-07 |
+| **04** | Patrol Testing Integration | [04_patrol_testing_plan.md](file:///d:/PRM_CP3/docs/plans/04_patrol_testing_plan.md) | **Completed** | 2026-07-07 |
+| **05** | Firebase Web Configuration | [05_firebase_web_plan.md](file:///d:/PRM_CP3/docs/plans/05_firebase_web_plan.md) | **Completed** | 2026-07-08 |
+| **06** | Keywords Flow Completion | [06_keyword_analytics_completion_plan.md](file:///d:/PRM_CP3/docs/plans/06_keyword_analytics_completion_plan.md) | **Completed** | 2026-07-08 |
+| **07** | Journals and PDF Report Export | [07_journals_and_pdf_export_plan.md](file:///d:/PRM_CP3/docs/plans/07_journals_and_pdf_export_plan.md) | **Completed** | 2026-07-08 |
 
 ---
 
 ## 📋 Active Implementation State
 
-Firebase Authentication (Google Sign-In), Firebase Analytics, and Patrol UI testing are 100% integrated on both Android and Web/Chrome platforms. The project features redirection guards, logs 7 required activity events, and contains 2 Patrol integration tests. The code is error-free under `flutter analyze` and all unit tests pass successfully.
-A `build_apk.bat` automation helper script is added at the root. Android application display name and Web tab headers are corrected to `Journal Trend Analyzer` for display compatibility.
-The API client features a rate-limit retry mechanism to automatically resolve HTTP 429 errors.
+Firebase Authentication (Google Sign-In), Firebase Analytics, and Patrol UI testing are 100% integrated on both Android and Web/Chrome platforms. 
 
-Next steps will involve:
-1. Setting up **Firebase Storage** for PDF report export.
-2. Implementing the remaining required views (Journal List, Journal Detail, Keyword Detail).
+The application utilizes a **4-tab Bottom Navigation Bar** layout:
+1. **Home**: A unified search + dashboard overview screen plotting publication trends on a line chart and listing results.
+2. **Journals**: Offers top contributing journals ranked lists, contribution charts, and citation volume tracking.
+3. **Keywords**: Offers frequent keyword rankings, growth metrics, and frequency trend visualizations.
+4. **Profile**: User credential overview and Firebase labs.
+
+The **PDF Report Export** function is wired: generating a formatted PDF document of topic analytics, uploading it to **Firebase Storage**, and returning download links with options to Copy Link or Open in Browser.
+
+E2E Patrol integration tests are implemented for all flows (Test Case 1 through 11). All widget/unit tests and code analysis pass with **0 errors**.

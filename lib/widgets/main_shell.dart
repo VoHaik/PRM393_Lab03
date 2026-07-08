@@ -10,28 +10,24 @@ class MainShell extends StatelessWidget {
 
   int _calculateSelectedIndex(BuildContext context) {
     final String location = GoRouterState.of(context).uri.toString();
-    if (location.startsWith('/analysis')) return 1;
-    if (location.startsWith('/dashboard')) return 2;
-    if (location.startsWith('/keywords') || location.startsWith('/keyword-detail')) return 3;
-    if (location.startsWith('/profile')) return 4;
-    return 0; // Default to search
+    if (location.startsWith('/journals') || location.startsWith('/journal-detail')) return 1;
+    if (location.startsWith('/keywords') || location.startsWith('/keyword-detail')) return 2;
+    if (location.startsWith('/profile')) return 3;
+    return 0; // Default to /home
   }
 
   void _onItemTapped(int index, BuildContext context) {
     switch (index) {
       case 0:
-        context.go('/search');
+        context.go('/home');
         break;
       case 1:
-        context.go('/analysis');
+        context.go('/journals');
         break;
       case 2:
-        context.go('/dashboard');
-        break;
-      case 3:
         context.go('/keywords');
         break;
-      case 4:
+      case 3:
         context.go('/profile');
         break;
     }
@@ -63,16 +59,12 @@ class MainShell extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
           items: const [
             BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.magnifyingGlass, size: 18),
-              label: 'Search',
+              icon: FaIcon(FontAwesomeIcons.house, size: 18),
+              label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.chartLine, size: 18),
-              label: 'Trends',
-            ),
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.circleInfo, size: 18),
-              label: 'Dashboard',
+              icon: FaIcon(FontAwesomeIcons.bookOpen, size: 18),
+              label: 'Journals',
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.tags, size: 18),

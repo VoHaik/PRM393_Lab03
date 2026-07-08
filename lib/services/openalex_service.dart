@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import '../models/analytics_summary.dart';
 import '../models/author.dart';
 import '../models/journal.dart';
+import '../models/journal_detail.dart';
 import '../models/keyword_analytics.dart';
 import '../models/keyword_detail.dart';
 import '../models/publication.dart';
@@ -390,5 +391,45 @@ class OpenAlexService {
       return false;
     }
     return true;
+  }
+
+  Future<JournalDetailData> getJournalDetail(String journalId, String keyword) async {
+    try {
+      final cleanId = journalId.replaceAll('https://openalex.org/', '');
+      
+      final results = await Future.wait([
+        apiClient.get('/sources/$cleanId'),
+        apiClient.get(
+          '/works',
+          queryParameters: {
+            'filter': 'primary_location.source.id:$cleanId',
+            'search': keyword,
+            'sort': 'cited_by_count:desc',
+            'per_page': 20,
+          },
+        ),
+      ]);
+
+      final sourceResponse = results[0];
+      final worksResponse = results[1];
+
+      if (sourceResponse.statusCode == 200 && worksResponse.statusCode == 200) {
+        final sourceJson = sourceResponse.data as Map<String, dynamic>? ?? {};
+        final List<dynamic> worksResults = worksResponse.data['results'] as List<dynamic>? ?? [];
+        
+        final publications = worksResults
+            .map((json) => Publication.fromJson(json as Map<String, dynamic>))
+            .toList();
+
+        return JournalDetailData.fromJson(
+          sourceJson: sourceJson,
+          relatedPubs: publications,
+        );
+      } else {
+        throw Exception('Failed to get journal details');
+      }
+    } catch (e) {
+      throw Exception('Get journal detail failed: $e');
+    }
   }
 }

@@ -12,13 +12,14 @@ import 'package:journal_trend_analyzer/models/keyword_detail.dart';
 import 'package:journal_trend_analyzer/models/publication.dart';
 import 'package:journal_trend_analyzer/screens/keyword_detail_screen.dart';
 import 'package:journal_trend_analyzer/screens/keywords_screen.dart';
-import 'package:journal_trend_analyzer/screens/search_screen.dart';
+import 'package:journal_trend_analyzer/screens/home_screen.dart';
 import 'package:journal_trend_analyzer/services/analytics_service.dart';
 import 'package:journal_trend_analyzer/services/openalex_service.dart';
 import 'package:journal_trend_analyzer/viewmodels/analysis_viewmodel.dart';
 import 'package:journal_trend_analyzer/viewmodels/dashboard_viewmodel.dart';
 import 'package:journal_trend_analyzer/viewmodels/keyword_viewmodel.dart';
 import 'package:journal_trend_analyzer/viewmodels/search_viewmodel.dart';
+import 'package:journal_trend_analyzer/viewmodels/journal_viewmodel.dart';
 import 'package:journal_trend_analyzer/widgets/main_shell.dart';
 
 class FakeOpenAlexService extends Fake implements OpenAlexService {
@@ -247,14 +248,14 @@ void main() {
     await tester.pumpWidget(
       MaterialApp.router(
         routerConfig: GoRouter(
-          initialLocation: '/search',
+          initialLocation: '/home',
           routes: [
             ShellRoute(
               builder: (context, state, child) => MainShell(child: child),
               routes: [
                 GoRoute(
-                  path: '/search',
-                  builder: (context, state) => const SizedBox(key: Key('search')),
+                  path: '/home',
+                  builder: (context, state) => const SizedBox(key: Key('home')),
                 ),
                 GoRoute(
                   path: '/analysis',
@@ -292,6 +293,7 @@ void main() {
     final analysisViewModel = AnalysisViewModel(openAlexService: service);
     final dashboardViewModel = DashboardViewModel(openAlexService: service);
     final keywordViewModel = KeywordViewModel(openAlexService: service);
+    final journalViewModel = JournalViewModel(openAlexService: service, analyticsService: analytics);
 
     await tester.pumpWidget(
       MultiProvider(
@@ -300,15 +302,16 @@ void main() {
           ChangeNotifierProvider.value(value: analysisViewModel),
           ChangeNotifierProvider.value(value: dashboardViewModel),
           ChangeNotifierProvider.value(value: keywordViewModel),
+          ChangeNotifierProvider.value(value: journalViewModel),
         ],
-        child: const MaterialApp(home: SearchScreen()),
+        child: const MaterialApp(home: HomeScreen()),
       ),
     );
 
     await tester.enterText(find.byType(TextField), 'Artificial Intelligence');
     await tester.tap(find.byIcon(Icons.arrow_forward_rounded));
     await tester.pump();
-    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
 
     expect(keywordViewModel.topic, 'Artificial Intelligence');
