@@ -38,3 +38,4 @@ android/key.properties
 .env.json
 !.vscode/launch.json
 android/app/google-services.json
+.env.json 
