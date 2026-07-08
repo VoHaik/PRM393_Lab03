@@ -5,7 +5,5 @@ void main() {
   test('web Firebase options are configured for the project', () {
     expect(DefaultFirebaseOptions.web.projectId, 'journal-trend-analyzer-7cd2e');
     expect(DefaultFirebaseOptions.web.messagingSenderId, '736803003999');
-    expect(DefaultFirebaseOptions.web.apiKey, isNotEmpty);
-    expect(DefaultFirebaseOptions.web.appId, isNotEmpty);
   });
 }

@@ -19,17 +19,18 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCcI_6dgnT8t1jktbPrDa6ScpBUZ_9dGBM',
-    appId: '1:736803003999:android:2bb76ba97974ddb86305ea',
+    apiKey: String.fromEnvironment('FIREBASE_WEB_API_KEY'),
+    appId: String.fromEnvironment('FIREBASE_WEB_APP_ID'),
     messagingSenderId: '736803003999',
     projectId: 'journal-trend-analyzer-7cd2e',
     authDomain: 'journal-trend-analyzer-7cd2e.firebaseapp.com',
     storageBucket: 'journal-trend-analyzer-7cd2e.firebasestorage.app',
+    measurementId: 'G-GDW060H3TW',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCcI_6dgnT8t1jktbPrDa6ScpBUZ_9dGBM',
-    appId: '1:736803003999:android:2bb76ba97974ddb86305ea',
+    apiKey: String.fromEnvironment('FIREBASE_ANDROID_API_KEY'),
+    appId: String.fromEnvironment('FIREBASE_ANDROID_APP_ID'),
     messagingSenderId: '736803003999',
     projectId: 'journal-trend-analyzer-7cd2e',
     storageBucket: 'journal-trend-analyzer-7cd2e.firebasestorage.app',

@@ -27,7 +27,7 @@ if %errorlevel% neq 0 (
 )
 echo.
 echo [3/3] Building Release APK (this might take a few minutes)...
-call flutter build apk --release
+call flutter build apk --release --dart-define-from-file=.env.json
 if %errorlevel% neq 0 (
     color 0C
     echo.
