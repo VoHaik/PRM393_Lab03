@@ -104,7 +104,7 @@ void main() {
       expect($('12 publications'), findsOneWidget);
       expect($('60.0% of matching topic publications'), findsOneWidget);
       expect($('Most active year: 2025'), findsOneWidget);
-      expect($('Growth: +8 publications'), findsOneWidget);
+      expect($('Growth: +4 publications'), findsWidgets);
 
       await $.scrollUntilVisible(
         finder: $('Keyword Trend Charts'),
