@@ -11,6 +11,7 @@ import '../lib/services/analytics_service.dart';
 import '../lib/viewmodels/analysis_viewmodel.dart';
 import '../lib/viewmodels/dashboard_viewmodel.dart';
 import '../lib/viewmodels/keyword_viewmodel.dart';
+import '../lib/viewmodels/journal_viewmodel.dart';
 import '../lib/viewmodels/search_viewmodel.dart';
 import 'mock_services.dart';
 
@@ -45,6 +46,12 @@ void main() {
             ChangeNotifierProvider(
               create: (_) => KeywordViewModel(openAlexService: openAlex),
             ),
+            ChangeNotifierProvider(
+              create: (_) => JournalViewModel(
+                openAlexService: openAlex,
+                analyticsService: analytics,
+              ),
+            ),
           ],
           child: const MaterialApp(home: HomeScreen()),
         ),
@@ -52,6 +59,8 @@ void main() {
 
       await $.enterText(find.byType(TextField), 'Artificial Intelligence');
       await $.tap(find.byIcon(Icons.arrow_forward_rounded));
+      await $.pump();
+      await $.pump(const Duration(seconds: 2));
       await $.pumpAndSettle();
 
       expect($('Results for "Artificial Intelligence"'), findsOneWidget);
@@ -65,7 +74,7 @@ void main() {
   );
 
   patrolTest(
-    'Test Case 6 - Keywords tab content displays keyword analytics',
+    'Test Case 6 - Keywords content displays keyword analytics',
     ($) async {
       final openAlex = MockOpenAlexService();
       final keywordViewModel = KeywordViewModel(openAlexService: openAlex);
@@ -82,8 +91,27 @@ void main() {
       expect($('Topic: Artificial Intelligence'), findsOneWidget);
       expect($('Most Frequent Keywords'), findsOneWidget);
       expect($('Trending Keywords'), findsOneWidget);
-      expect($('Machine Learning'), findsOneWidget);
+      expect($('Machine Learning'), findsWidgets);
+      expect($('Deep Learning'), findsWidgets);
+      expect($('12 publications'), findsWidgets);
+
+      await $.scrollUntilVisible(
+        finder: $('Keyword Frequency Statistics'),
+        view: find.byType(Scrollable),
+        delta: const Offset(0, -300),
+      );
+      expect($('Keyword Frequency Statistics'), findsOneWidget);
       expect($('12 publications'), findsOneWidget);
+      expect($('60.0% of matching topic publications'), findsOneWidget);
+      expect($('Most active year: 2025'), findsOneWidget);
+      expect($('Growth: +4 publications'), findsWidgets);
+
+      await $.scrollUntilVisible(
+        finder: $('Keyword Trend Charts'),
+        view: find.byType(Scrollable),
+        delta: const Offset(0, -300),
+      );
+      expect($('Keyword Trend Charts'), findsOneWidget);
     },
   );
 
@@ -102,7 +130,7 @@ void main() {
           child: const MaterialApp(
             home: KeywordDetailScreen(
               keyword: 'Deep Learning',
-              count: 12,
+              count: 10,
             ),
           ),
         ),
@@ -113,7 +141,7 @@ void main() {
       expect($('Deep Learning Specific Paper'), findsOneWidget);
       expect($('Deep Learning Journal'), findsOneWidget);
       expect($('Deep Learning Author'), findsOneWidget);
-      expect($('12 publications'), findsOneWidget);
+      expect($('10 publications'), findsOneWidget);
       expect(analytics.loggedEvents.contains('view_keyword'), isTrue);
       expect(
         analytics.loggedParameters['view_keyword']?['keyword'],
