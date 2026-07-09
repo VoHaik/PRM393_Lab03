@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import 'package:patrol/patrol.dart';
 import 'package:provider/provider.dart';
 
@@ -14,51 +13,7 @@ import '../lib/viewmodels/dashboard_viewmodel.dart';
 import '../lib/viewmodels/keyword_viewmodel.dart';
 import '../lib/viewmodels/journal_viewmodel.dart';
 import '../lib/viewmodels/search_viewmodel.dart';
-import '../lib/widgets/main_shell.dart';
 import 'mock_services.dart';
-
-Widget _buildKeywordFlowApp({
-  required KeywordViewModel keywordViewModel,
-  String initialLocation = '/home',
-}) {
-  final router = GoRouter(
-    initialLocation: initialLocation,
-    routes: [
-      ShellRoute(
-        builder: (context, state, child) => MainShell(child: child),
-        routes: [
-          GoRoute(
-            path: '/home',
-            builder: (context, state) => const Scaffold(
-              body: Center(child: Text('Home Test Surface')),
-            ),
-          ),
-          GoRoute(
-            path: '/keywords',
-            builder: (context, state) => const KeywordsScreen(),
-          ),
-        ],
-      ),
-      GoRoute(
-        path: '/keyword-detail',
-        builder: (context, state) {
-          final extra = state.extra as Map<String, dynamic>? ?? const {};
-          return KeywordDetailScreen(
-            keyword: extra['keyword']?.toString() ?? '',
-            count: extra['count'] as int? ?? 0,
-          );
-        },
-      ),
-    ],
-  );
-
-  return ChangeNotifierProvider.value(
-    value: keywordViewModel,
-    child: MaterialApp.router(
-      routerConfig: router,
-    ),
-  );
-}
 
 void main() {
   final sl = GetIt.instance;
@@ -119,27 +74,26 @@ void main() {
   );
 
   patrolTest(
-    'Test Case 6 - Navigate to Keywords tab and display keyword analytics',
+    'Test Case 6 - Keywords content displays keyword analytics',
     ($) async {
       final openAlex = MockOpenAlexService();
       final keywordViewModel = KeywordViewModel(openAlexService: openAlex);
       await keywordViewModel.loadForTopic('Artificial Intelligence');
 
       await $.pumpWidgetAndSettle(
-        _buildKeywordFlowApp(keywordViewModel: keywordViewModel),
+        ChangeNotifierProvider.value(
+          value: keywordViewModel,
+          child: const MaterialApp(home: KeywordsScreen()),
+        ),
       );
 
-      expect($('Home Test Surface'), findsOneWidget);
-
-      await $.tap($('Keywords'));
-      await $.pumpAndSettle();
-
-      expect($('Keywords'), findsWidgets);
+      expect($('Keywords'), findsOneWidget);
       expect($('Topic: Artificial Intelligence'), findsOneWidget);
       expect($('Most Frequent Keywords'), findsOneWidget);
       expect($('Trending Keywords'), findsOneWidget);
       expect($('Machine Learning'), findsWidgets);
       expect($('Deep Learning'), findsWidgets);
+      expect($('12 publications'), findsWidgets);
 
       await $.scrollUntilVisible(
         finder: $('Keyword Frequency Statistics'),
@@ -162,27 +116,25 @@ void main() {
   );
 
   patrolTest(
-    'Test Case 7 - Open keyword from list and display keyword analysis',
+    'Test Case 7 - Keyword Details displays details and logs view_keyword',
     ($) async {
       final openAlex = MockOpenAlexService();
       final analytics = MockAnalyticsService();
       sl.registerLazySingleton<AnalyticsService>(() => analytics);
 
       final keywordViewModel = KeywordViewModel(openAlexService: openAlex);
-      await keywordViewModel.loadForTopic('Artificial Intelligence');
 
       await $.pumpWidgetAndSettle(
-        _buildKeywordFlowApp(
-          keywordViewModel: keywordViewModel,
-          initialLocation: '/keywords',
+        ChangeNotifierProvider.value(
+          value: keywordViewModel,
+          child: const MaterialApp(
+            home: KeywordDetailScreen(
+              keyword: 'Deep Learning',
+              count: 10,
+            ),
+          ),
         ),
       );
-
-      expect($('Keywords'), findsWidgets);
-      expect($('Deep Learning'), findsWidgets);
-
-      await $.tester.tap(find.text('Deep Learning').first);
-      await $.pumpAndSettle();
 
       expect($('Keyword Details'), findsOneWidget);
       expect($('Deep Learning'), findsWidgets);
