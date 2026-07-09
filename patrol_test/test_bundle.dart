@@ -9,7 +9,7 @@ import 'package:patrol/src/platform/contracts/contracts.dart';
 import 'package:test_api/src/backend/invoker.dart';
 
 // START: GENERATED TEST IMPORTS
-import 'C:/Users/KHAI/Documents/semester 8/PRM-Lab-03/PRM393_Lab03/integration_test/auth_flow_test.dart' as C:__Users__KHAI__Documents__semester 8__PRM-Lab-03__PRM393_Lab03__integration_test__auth_flow_test;
+import 'D:/FPTU-sourse/Term8/PRM393/PRM393_Lab03/integration_test/profile_test.dart' as D:__FPTU-sourse__Term8__PRM393__PRM393_Lab03__integration_test__profile_test;
 // END: GENERATED TEST IMPORTS
 
 Future<void> main() async {
@@ -72,7 +72,7 @@ Future<void> main() async {
   });
 
 // START: GENERATED TEST GROUPS
-  group('C:.Users.KHAI.Documents.semester 8.PRM-Lab-03.PRM393_Lab03.integration_test.auth_flow_test', C:__Users__KHAI__Documents__semester 8__PRM-Lab-03__PRM393_Lab03__integration_test__auth_flow_test.main);
+  group('D:.FPTU-sourse.Term8.PRM393.PRM393_Lab03.integration_test.profile_test', D:__FPTU-sourse__Term8__PRM393__PRM393_Lab03__integration_test__profile_test.main);
 // END: GENERATED TEST GROUPS
 
   final dartTestGroup = await testExplorationCompleter.future;
