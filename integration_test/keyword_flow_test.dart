@@ -158,32 +158,34 @@ void main() {
   );
 
   patrolTest(
-    'Test Case 7 - Keyword Details displays details and logs view_keyword',
+    'Test Case 7 - Open keyword from list and display keyword analysis',
     ($) async {
       final openAlex = MockOpenAlexService();
       final analytics = MockAnalyticsService();
       sl.registerLazySingleton<AnalyticsService>(() => analytics);
 
       final keywordViewModel = KeywordViewModel(openAlexService: openAlex);
+      await keywordViewModel.loadForTopic('Artificial Intelligence');
 
       await $.pumpWidgetAndSettle(
-        ChangeNotifierProvider.value(
-          value: keywordViewModel,
-          child: const MaterialApp(
-            home: KeywordDetailScreen(
-              keyword: 'Deep Learning',
-              count: 12,
-            ),
-          ),
+        _buildKeywordFlowApp(
+          keywordViewModel: keywordViewModel,
+          initialLocation: '/keywords',
         ),
       );
+
+      expect($('Keywords'), findsWidgets);
+      expect($('Deep Learning'), findsWidgets);
+
+      await $.tester.tap(find.text('Deep Learning').first);
+      await $.pumpAndSettle();
 
       expect($('Keyword Details'), findsOneWidget);
       expect($('Deep Learning'), findsWidgets);
       expect($('Deep Learning Specific Paper'), findsOneWidget);
       expect($('Deep Learning Journal'), findsOneWidget);
       expect($('Deep Learning Author'), findsOneWidget);
-      expect($('12 publications'), findsOneWidget);
+      expect($('10 publications'), findsOneWidget);
       expect(analytics.loggedEvents.contains('view_keyword'), isTrue);
       expect(
         analytics.loggedParameters['view_keyword']?['keyword'],
@@ -191,4 +193,5 @@ void main() {
       );
     },
   );
+
 }
