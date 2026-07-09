@@ -147,6 +147,10 @@ void main() {
         delta: const Offset(0, -300),
       );
       expect($('Keyword Frequency Statistics'), findsOneWidget);
+      expect($('12 publications'), findsOneWidget);
+      expect($('60.0% of matching topic publications'), findsOneWidget);
+      expect($('Most active year: 2025'), findsOneWidget);
+      expect($('Growth: +8 publications'), findsOneWidget);
 
       await $.scrollUntilVisible(
         finder: $('Keyword Trend Charts'),
