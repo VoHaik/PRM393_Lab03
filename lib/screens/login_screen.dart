@@ -145,7 +145,7 @@ class LoginScreen extends StatelessWidget {
                                   onPressed: () async {
                                     final success = await authModel.signIn();
                                     if (success && context.mounted) {
-                                      context.go('/search');
+                                      context.go('/home');
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(

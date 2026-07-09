@@ -9,7 +9,7 @@ import 'package:patrol/src/native/contracts/contracts.dart';
 import 'package:test_api/src/backend/invoker.dart';
 
 // START: GENERATED TEST IMPORTS
-import 'auth_flow_test.dart' as __auth_flow_test;
+import 'profile_test.dart' as __profile_test;
 // END: GENERATED TEST IMPORTS
 
 Future<void> main() async {
@@ -69,7 +69,7 @@ Future<void> main() async {
   });
 
   // START: GENERATED TEST GROUPS
-  group('.auth_flow_test', __auth_flow_test.main);
+  group('.profile_test', __profile_test.main);
   // END: GENERATED TEST GROUPS
 
   final dartTestGroup = await testExplorationCompleter.future;

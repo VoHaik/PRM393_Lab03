@@ -6,6 +6,8 @@ import 'services/auth_service.dart';
 import 'services/analytics_service.dart';
 import 'services/report_service.dart';
 import 'services/storage_service.dart';
+import 'services/fcm_service.dart';
+import 'services/remote_config_service.dart';
 import 'viewmodels/search_viewmodel.dart';
 import 'viewmodels/detail_viewmodel.dart';
 import 'viewmodels/analysis_viewmodel.dart';
@@ -30,7 +32,13 @@ Future<void> init(AppConfig config) async {
   sl.registerFactory(
       () => JournalViewModel(openAlexService: sl(), analyticsService: sl()));
   sl.registerFactory(
-      () => ProfileViewModel(reportService: sl(), storageService: sl(), analyticsService: sl()));
+      () => ProfileViewModel(
+        reportService: sl(),
+        storageService: sl(),
+        analyticsService: sl(),
+        fcmService: sl(),
+        remoteConfigService: sl(),
+      ));
 
   // --- Services ---
   sl.registerLazySingleton(() => OpenAlexService(apiClient: sl()));
@@ -39,6 +47,8 @@ Future<void> init(AppConfig config) async {
   sl.registerLazySingleton(() => AnalyticsService());
   sl.registerLazySingleton(() => ReportService());
   sl.registerLazySingleton(() => StorageService());
+  sl.registerLazySingleton(() => FcmService());
+  sl.registerLazySingleton(() => RemoteConfigService());
 
   // --- Core / External ---
   final apiClient = await ApiClient.create();

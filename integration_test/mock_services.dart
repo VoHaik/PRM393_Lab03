@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mocktail/mocktail.dart';
 import '../lib/models/analytics_summary.dart';
 import '../lib/models/journal_detail.dart';
@@ -13,6 +14,8 @@ import '../lib/services/analytics_service.dart';
 import '../lib/services/openalex_service.dart';
 import '../lib/services/storage_service.dart';
 import '../lib/services/report_service.dart';
+import '../lib/services/fcm_service.dart';
+import '../lib/services/remote_config_service.dart';
 
 class FakeUser extends Fake implements User {
   @override
@@ -20,7 +23,7 @@ class FakeUser extends Fake implements User {
   @override
   String get email => 'test.professor@example.com';
   @override
-  String get photoURL => 'https://via.placeholder.com/150';
+  String? get photoURL => null;
   @override
   String get uid => 'fake_uid_12345';
 }
@@ -309,6 +312,71 @@ class MockReportService implements ReportService {
   Future<Uint8List> generatePdfReport(AnalyticsSummary summary, String topic) async {
     return Uint8List.fromList([1, 2, 3, 4]);
   }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+// ============================================================
+// Mock FCM Service
+// ============================================================
+class MockFcmService implements FcmService {
+  final List<AppNotification> _mockNotifications = [];
+
+  @override
+  List<AppNotification> get notifications => _mockNotifications;
+
+  @override
+  VoidCallback? onNewNotification;
+
+  @override
+  Future<void> initialize() async {}
+
+  @override
+  void clearNotifications() {
+    _mockNotifications.clear();
+    onNewNotification?.call();
+  }
+
+  void injectFakeNotification(AppNotification n) {
+    _mockNotifications.insert(0, n);
+    onNewNotification?.call();
+  }
+}
+
+// ============================================================
+// Mock Remote Config Service
+// ============================================================
+class MockRemoteConfigService implements RemoteConfigService {
+  int _maxJournals = 5;
+  int _maxKeywords = 8;
+  bool _fetched = false;
+
+  @override
+  bool get isFetched => _fetched;
+
+  @override
+  int get maxJournalsDisplay => _maxJournals;
+
+  @override
+  int get maxKeywordsDisplay => _maxKeywords;
+
+  @override
+  Future<void> initialize() async {}
+
+  @override
+  Future<void> fetchAndActivate() async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    _maxJournals = 5;
+    _maxKeywords = 8;
+    _fetched = true;
+  }
+
+  @override
+  Map<String, dynamic> getAllValues() => {
+        RemoteConfigService.keyMaxJournals: _maxJournals,
+        RemoteConfigService.keyMaxKeywords: _maxKeywords,
+      };
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
