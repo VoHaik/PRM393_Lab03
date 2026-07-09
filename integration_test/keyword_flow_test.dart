@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:patrol/patrol.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,51 @@ import '../lib/viewmodels/dashboard_viewmodel.dart';
 import '../lib/viewmodels/keyword_viewmodel.dart';
 import '../lib/viewmodels/journal_viewmodel.dart';
 import '../lib/viewmodels/search_viewmodel.dart';
+import '../lib/widgets/main_shell.dart';
 import 'mock_services.dart';
+
+Widget _buildKeywordFlowApp({
+  required KeywordViewModel keywordViewModel,
+  String initialLocation = '/home',
+}) {
+  final router = GoRouter(
+    initialLocation: initialLocation,
+    routes: [
+      ShellRoute(
+        builder: (context, state, child) => MainShell(child: child),
+        routes: [
+          GoRoute(
+            path: '/home',
+            builder: (context, state) => const Scaffold(
+              body: Center(child: Text('Home Test Surface')),
+            ),
+          ),
+          GoRoute(
+            path: '/keywords',
+            builder: (context, state) => const KeywordsScreen(),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/keyword-detail',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? const {};
+          return KeywordDetailScreen(
+            keyword: extra['keyword']?.toString() ?? '',
+            count: extra['count'] as int? ?? 0,
+          );
+        },
+      ),
+    ],
+  );
+
+  return ChangeNotifierProvider.value(
+    value: keywordViewModel,
+    child: MaterialApp.router(
+      routerConfig: router,
+    ),
+  );
+}
 
 void main() {
   final sl = GetIt.instance;
