@@ -119,25 +119,41 @@ void main() {
   );
 
   patrolTest(
-    'Test Case 6 - Keywords tab content displays keyword analytics',
+    'Test Case 6 - Navigate to Keywords tab and display keyword analytics',
     ($) async {
       final openAlex = MockOpenAlexService();
       final keywordViewModel = KeywordViewModel(openAlexService: openAlex);
       await keywordViewModel.loadForTopic('Artificial Intelligence');
 
       await $.pumpWidgetAndSettle(
-        ChangeNotifierProvider.value(
-          value: keywordViewModel,
-          child: const MaterialApp(home: KeywordsScreen()),
-        ),
+        _buildKeywordFlowApp(keywordViewModel: keywordViewModel),
       );
 
-      expect($('Keywords'), findsOneWidget);
+      expect($('Home Test Surface'), findsOneWidget);
+
+      await $.tap($('Keywords'));
+      await $.pumpAndSettle();
+
+      expect($('Keywords'), findsWidgets);
       expect($('Topic: Artificial Intelligence'), findsOneWidget);
       expect($('Most Frequent Keywords'), findsOneWidget);
       expect($('Trending Keywords'), findsOneWidget);
-      expect($('Machine Learning'), findsOneWidget);
-      expect($('12 publications'), findsOneWidget);
+      expect($('Machine Learning'), findsWidgets);
+      expect($('Deep Learning'), findsWidgets);
+
+      await $.scrollUntilVisible(
+        finder: $('Keyword Frequency Statistics'),
+        view: find.byType(Scrollable),
+        delta: const Offset(0, -300),
+      );
+      expect($('Keyword Frequency Statistics'), findsOneWidget);
+
+      await $.scrollUntilVisible(
+        finder: $('Keyword Trend Charts'),
+        view: find.byType(Scrollable),
+        delta: const Offset(0, -300),
+      );
+      expect($('Keyword Trend Charts'), findsOneWidget);
     },
   );
 
