@@ -11,6 +11,7 @@ import '../lib/services/analytics_service.dart';
 import '../lib/viewmodels/analysis_viewmodel.dart';
 import '../lib/viewmodels/dashboard_viewmodel.dart';
 import '../lib/viewmodels/keyword_viewmodel.dart';
+import '../lib/viewmodels/journal_viewmodel.dart';
 import '../lib/viewmodels/search_viewmodel.dart';
 import 'mock_services.dart';
 
@@ -45,6 +46,12 @@ void main() {
             ChangeNotifierProvider(
               create: (_) => KeywordViewModel(openAlexService: openAlex),
             ),
+            ChangeNotifierProvider(
+              create: (_) => JournalViewModel(
+                openAlexService: openAlex,
+                analyticsService: analytics,
+              ),
+            ),
           ],
           child: const MaterialApp(home: HomeScreen()),
         ),
@@ -52,6 +59,8 @@ void main() {
 
       await $.enterText(find.byType(TextField), 'Artificial Intelligence');
       await $.tap(find.byIcon(Icons.arrow_forward_rounded));
+      await $.pump();
+      await $.pump(const Duration(seconds: 2));
       await $.pumpAndSettle();
 
       expect($('Results for "Artificial Intelligence"'), findsOneWidget);
