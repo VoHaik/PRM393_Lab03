@@ -16,6 +16,7 @@ class AppConfig {
   });
 
   static const _envAssetPath = '.env.json';
+  static const _fallbackEnvAssetPath = '.env.json.example';
 
   FirebaseOptions get firebaseOptions {
     if (kIsWeb) {
@@ -33,7 +34,7 @@ class AppConfig {
   }
 
   static Future<AppConfig> load() async {
-    final jsonString = await rootBundle.loadString(_envAssetPath);
+    final jsonString = await _loadEnvJson();
     final data = jsonDecode(jsonString) as Map<String, dynamic>;
 
     final messagingSenderId = _required(data, 'FIREBASE_MESSAGING_SENDER_ID');
@@ -58,6 +59,14 @@ class AppConfig {
         storageBucket: storageBucket,
       ),
     );
+  }
+
+  static Future<String> _loadEnvJson() async {
+    try {
+      return await rootBundle.loadString(_envAssetPath);
+    } on FlutterError {
+      return rootBundle.loadString(_fallbackEnvAssetPath);
+    }
   }
 
   static String _required(Map<String, dynamic> data, String key) {
