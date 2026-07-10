@@ -57,6 +57,8 @@ void main() {
         reportService: report,
         storageService: storage,
         analyticsService: analytics,
+        fcmService: MockFcmService(),
+        remoteConfigService: MockRemoteConfigService(),
       );
 
       await $.pumpWidgetAndSettle(
