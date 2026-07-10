@@ -19,7 +19,7 @@ class AppRouter {
       final bool loggingIn = state.uri.path == '/login';
 
       if (!loggedIn) {
-        return '/login';
+        return loggingIn ? null : '/login';
       }
 
       if (loggingIn || state.uri.path == '/') {
