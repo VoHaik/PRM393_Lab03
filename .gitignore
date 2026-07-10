@@ -27,6 +27,7 @@ migrate_working_dir/
 build/
 lib/generated/
 patrol_test/test_bundle.dart
+integration_test/test_bundle.dart
 
 # Android Related
 android/app/src/main/res/values/strings.xml
@@ -39,4 +40,3 @@ android/key.properties
 .env.json
 !.vscode/launch.json
 android/app/google-services.json
-.env.json 
