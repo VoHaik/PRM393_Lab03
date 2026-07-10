@@ -48,7 +48,9 @@ class RemoteConfigService {
       debugPrint('[RemoteConfig] max_journals_display = $maxJournalsDisplay');
       debugPrint('[RemoteConfig] max_keywords_display = $maxKeywordsDisplay');
     } catch (e) {
+      _isFetched = false;
       debugPrint('[RemoteConfig] fetchAndActivate error: $e');
+      rethrow;
     }
   }
 
