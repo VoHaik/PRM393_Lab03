@@ -1,0 +1,6 @@
+# Custom Rules & Guidelines for Journal Trend Analyzer
+
+## Planning Rules (Quy tắc lập kế hoạch)
+
+- **Vietnamese**: Mỗi khi người dùng giao nhiệm vụ hoặc đề xuất bất kỳ công việc nào, nếu người dùng có nhắc đến cụm từ "plan details" (hoặc "kế hoạch chi tiết"), trợ lý ảo (AI Agent) BẮT BUỘC phải tạo một file Markdown (.md) mô tả chi tiết kế hoạch thực hiện để người dùng xem xét (review) và nắm bắt ngữ cảnh (context) trước khi bắt đầu sửa đổi code hoặc thực thi các lệnh thay đổi hệ thống.
+- **English**: Whenever the user assigns a task or proposes any work, if the user mentions the phrase "plan details" (or "kế hoạch chi tiết"), the AI Agent MUST create a detailed implementation plan in a Markdown (.md) file for the user to review and understand the context of what the agent is doing before modifying any code or executing commands.

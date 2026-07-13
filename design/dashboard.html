@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal Trend Analyzer - Dashboard Mockup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="container">
+        <!-- App Header -->
+        <div class="app-header">
+            <i class="fa-solid fa-gauge-high" style="color: var(--accent-cyan); font-size: 24px;"></i>
+            <span class="app-title-gradient">Research Dashboard</span>
+        </div>
+        <p class="sub-title">Key analytics & aggregated insights</p>
+
+        <!-- Main dashboard scroll body -->
+        <div class="dashboard-scroll">
+            
+            <div class="keyword-tag" style="margin-bottom: 16px;">Topic Analysis: Artificial Intelligence</div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <!-- Stat 1 -->
+                <div class="glass-card stat-card">
+                    <div class="stat-header">
+                        <span>Total Works</span>
+                        <i class="fa-solid fa-book" style="color: var(--accent-cyan);"></i>
+                    </div>
+                    <div class="stat-value">15,248</div>
+                </div>
+
+                <!-- Stat 2 -->
+                <div class="glass-card stat-card">
+                    <div class="stat-header">
+                        <span>Avg Citations</span>
+                        <i class="fa-solid fa-quote-left" style="color: var(--accent-violet);"></i>
+                    </div>
+                    <div class="stat-value">34.2</div>
+                </div>
+
+                <!-- Stat 3 -->
+                <div class="glass-card stat-card">
+                    <div class="stat-header">
+                        <span>Peak Year</span>
+                        <i class="fa-solid fa-ranking-star" style="color: #fbbf24;"></i>
+                    </div>
+                    <div class="stat-value">2023</div>
+                </div>
+
+                <!-- Stat 4 -->
+                <div class="glass-card stat-card">
+                    <div class="stat-header">
+                        <span>Sampled Base</span>
+                        <i class="fa-solid fa-chart-pie" style="color: #2dd4bf;"></i>
+                    </div>
+                    <div class="stat-value" style="font-size: 16px;">Top 50 papers</div>
+                </div>
+            </div>
+
+            <!-- Top Journal -->
+            <div class="dashboard-section-title">Top Journal Source</div>
+            <div class="glass-card entity-row-card">
+                <div class="entity-icon-box">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                    <div class="entity-name">Journal of Machine Learning Research</div>
+                    <div class="entity-sub">Publisher: Microtome Publishing (journal)</div>
+                </div>
+            </div>
+
+            <!-- Top Author -->
+            <div class="dashboard-section-title">Top Active Author</div>
+            <div class="glass-card entity-row-card">
+                <div class="entity-icon-box" style="color: var(--accent-violet); background: rgba(139, 92, 246, 0.1);">
+                    <i class="fa-solid fa-user-pen"></i>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                    <div class="entity-name">Yoshua Bengio</div>
+                    <div class="entity-sub">ORCID: 0000-0002-3869-9026</div>
+                </div>
+            </div>
+
+            <!-- Most Influential Paper -->
+            <div class="dashboard-section-title">Most Influential Paper</div>
+            <a href="detail.html" class="glass-card influential-card">
+                <div class="influential-header">
+                    <i class="fa-solid fa-crown" style="color: #fbbf24; font-size: 16px;"></i>
+                    <span class="citation-badge" style="color: var(--accent-violet); font-size: 12px; font-weight: 700;">
+                        <i class="fa-solid fa-quote-left"></i> 12450 Citations
+                    </span>
+                </div>
+                <div class="influential-title">Attention Is All You Need for Natural Language Processing</div>
+                <div style="font-size: 11px; color: var(--text-secondary);">Published: 2017 • Tap to view details</div>
+            </a>
+
+        </div>
+
+        <!-- Emulator Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="search.html" class="nav-item">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>Search</span>
+            </a>
+            <a href="analysis.html" class="nav-item">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Trends</span>
+            </a>
+            <a href="dashboard.html" class="nav-item active">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Dashboard</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

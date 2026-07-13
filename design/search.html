@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal Trend Analyzer - Search Mockup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="search.css">
+</head>
+<body>
+    <div class="container">
+        <!-- App Header -->
+        <div class="app-header">
+            <i class="fa-solid fa-graduation-cap" style="color: var(--accent-cyan); font-size: 24px;"></i>
+            <span class="app-title-gradient">Journal Trend Analyzer</span>
+        </div>
+        <p class="sub-title">Explore insights from OpenAlex database</p>
+
+        <!-- Search Bar -->
+        <div class="search-wrapper">
+            <i class="fa-solid fa-magnifying-glass search-icon-left"></i>
+            <input type="text" class="search-input" value="Artificial Intelligence" placeholder="Search topic (e.g. Cybersecurity)...">
+            <button class="search-icon-right"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <!-- Chips -->
+        <div class="chips-list">
+            <div class="chip">Artificial Intelligence</div>
+            <div class="chip">Cybersecurity</div>
+            <div class="chip">Blockchain</div>
+            <div class="chip">Data Science</div>
+        </div>
+
+        <div class="results-header">Results for "Artificial Intelligence"</div>
+
+        <!-- Results Scrollable Area -->
+        <div class="results-scroll">
+            
+            <!-- Card 1 -->
+            <a href="detail.html" class="glass-card article-card">
+                <div class="article-title">Deep Learning: A Comprehensive Survey and Insights</div>
+                <div class="article-meta">
+                    <span><i class="fa-solid fa-book-open"></i> Journal of AI Research</span>
+                </div>
+                <div class="article-authors">Yoshua Bengio, Yann LeCun, Geoffrey Hinton</div>
+                <div class="card-footer">
+                    <span class="year-badge">2023</span>
+                    <span class="citation-badge"><i class="fa-solid fa-quote-left"></i> 1420 Citations</span>
+                </div>
+            </a>
+
+            <!-- Card 2 -->
+            <a href="detail.html" class="glass-card article-card">
+                <div class="article-title">Attention Is All You Need for Natural Language Processing</div>
+                <div class="article-meta">
+                    <span><i class="fa-solid fa-book-open"></i> Advances in Neural Systems</span>
+                </div>
+                <div class="article-authors">Ashish Vaswani, Noam Shazeer, Niki Parmar</div>
+                <div class="card-footer">
+                    <span class="year-badge">2017</span>
+                    <span class="citation-badge"><i class="fa-solid fa-quote-left"></i> 12450 Citations</span>
+                </div>
+            </a>
+
+            <!-- Card 3 -->
+            <a href="detail.html" class="glass-card article-card">
+                <div class="article-title">Generative Adversarial Nets: Architectures and Trends</div>
+                <div class="article-meta">
+                    <span><i class="fa-solid fa-book-open"></i> IEEE Transactions on Pattern Analysis</span>
+                </div>
+                <div class="article-authors">Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza</div>
+                <div class="card-footer">
+                    <span class="year-badge">2021</span>
+                    <span class="citation-badge"><i class="fa-solid fa-quote-left"></i> 890 Citations</span>
+                </div>
+            </a>
+
+        </div>
+
+        <!-- Emulator Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="search.html" class="nav-item active">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>Search</span>
+            </a>
+            <a href="analysis.html" class="nav-item">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Trends</span>
+            </a>
+            <a href="dashboard.html" class="nav-item">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Dashboard</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

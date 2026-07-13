@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal Trend Analyzer - Detail Mockup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="detail.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Back Button -->
+        <a href="search.html" class="back-btn">
+            <i class="fa-solid fa-chevron-left"></i>
+            <span>Back to Search</span>
+        </a>
+
+        <!-- Detail Scrollable Content -->
+        <div class="detail-scroll">
+            
+            <!-- Article Header Card -->
+            <div class="glass-card detail-header-card">
+                <div class="detail-top-meta">
+                    <span class="year-badge" style="background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3);">2017</span>
+                    <span class="citation-badge"><i class="fa-solid fa-quote-left"></i> 12450 Citations</span>
+                </div>
+                <h1 class="detail-title">Attention Is All You Need for Natural Language Processing</h1>
+            </div>
+
+            <!-- Source Metadata -->
+            <div class="section-label">Source Info</div>
+            <div class="meta-row">
+                <i class="fa-solid fa-book-open"></i>
+                <span class="meta-key">Journal:</span>
+                <span class="meta-val">Advances in Neural Systems</span>
+            </div>
+            <div class="meta-row">
+                <i class="fa-solid fa-building"></i>
+                <span class="meta-key">Publisher:</span>
+                <span class="meta-val">MIT Press Publishing</span>
+            </div>
+            <div class="meta-row">
+                <i class="fa-solid fa-tag"></i>
+                <span class="meta-key">Source Type:</span>
+                <span class="meta-val">JOURNAL</span>
+            </div>
+
+            <!-- Authors list -->
+            <div class="section-label">Authors</div>
+            <div class="authors-box">
+                <div class="glass-card author-item">
+                    <i class="fa-solid fa-user-pen author-icon"></i>
+                    <div>
+                        <div class="author-name">Ashish Vaswani</div>
+                        <div class="author-orcid">ORCID: 0000-0002-3869-9026</div>
+                    </div>
+                </div>
+                <div class="glass-card author-item">
+                    <i class="fa-solid fa-user-pen author-icon"></i>
+                    <div>
+                        <div class="author-name">Noam Shazeer</div>
+                        <div class="author-orcid">ORCID: 0000-0001-5231-1182</div>
+                    </div>
+                </div>
+                <div class="glass-card author-item">
+                    <i class="fa-solid fa-user-pen author-icon"></i>
+                    <div>
+                        <div class="author-name">Niki Parmar</div>
+                        <div class="author-orcid">ORCID: 0000-0003-1284-9014</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Abstract -->
+            <div class="section-label">Abstract</div>
+            <div class="glass-card abstract-box">
+                The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train.
+            </div>
+
+            <!-- DOI Button -->
+            <a href="https://doi.org/10.48550/arXiv.1706.03762" target="_blank" class="doi-btn">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                <span>Open Publisher Portal (DOI)</span>
+            </a>
+
+        </div>
+    </div>
+</body>
+</html>
