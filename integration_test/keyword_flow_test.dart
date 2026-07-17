@@ -98,7 +98,7 @@ void main() {
       await $.scrollUntilVisible(
         finder: $('Keyword Frequency Statistics'),
         view: find.byType(Scrollable),
-        delta: const Offset(0, -300),
+        delta: -300.0,
       );
       expect($('Keyword Frequency Statistics'), findsOneWidget);
       expect($('12 publications'), findsOneWidget);
@@ -109,7 +109,7 @@ void main() {
       await $.scrollUntilVisible(
         finder: $('Keyword Trend Charts'),
         view: find.byType(Scrollable),
-        delta: const Offset(0, -300),
+        delta: -300.0,
       );
       expect($('Keyword Trend Charts'), findsOneWidget);
     },

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
@@ -275,14 +274,14 @@ class MockOpenAlexService implements OpenAlexService {
       citedByCount: 4200,
       averageCitations: 35.0,
       relatedPublications: [
-        Publication(
+        const Publication(
           id: 'W-journal-1',
           title: 'Mock Related Journal Paper',
           publicationYear: 2024,
           citedByCount: 50,
           doiUrl: '',
           abstractText: 'Mock abstract text for related paper.',
-          authors: const [],
+          authors: [],
         ),
       ],
     );

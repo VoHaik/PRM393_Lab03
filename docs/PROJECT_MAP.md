@@ -81,6 +81,8 @@ This log lists all plans that have been proposed, are in progress, or are comple
 | **05** | Firebase Web Configuration | [05_firebase_web_plan.md](file:///d:/PRM_CP3/docs/plans/05_firebase_web_plan.md) | **Completed** | 2026-07-08 |
 | **06** | Keywords Flow Completion | [06_keyword_analytics_completion_plan.md](file:///d:/PRM_CP3/docs/plans/06_keyword_analytics_completion_plan.md) | **Completed** | 2026-07-08 |
 | **07** | Journals and PDF Report Export | [07_journals_and_pdf_export_plan.md](file:///d:/PRM_CP3/docs/plans/07_journals_and_pdf_export_plan.md) | **Completed** | 2026-07-08 |
+| **08** | Patrol Keyword Flow Integration | [08_lab03_patrol_keyword_flow_plan.md](file:///C:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/08_lab03_patrol_keyword_flow_plan.md) | **Completed** | 2026-07-08 |
+| **09** | Run Patrol E2E Authen and Analysis tests | [09_run_patrol_e2e_tests_tasks.md](file:///C:/Users/KHAI/Documents/semester%208/PRM-Lab-03/PRM393_Lab03/docs/plans/09_run_patrol_e2e_tests_tasks.md) | **Completed** | 2026-07-14 |
 
 ---
 

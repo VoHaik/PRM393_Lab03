@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../models/publication.dart';
 import '../../screens/detail_screen.dart';
 import '../../screens/keyword_detail_screen.dart';
@@ -10,12 +10,13 @@ import '../../screens/home_screen.dart';
 import '../../screens/journals_screen.dart';
 import '../../screens/journal_detail_screen.dart';
 import '../../widgets/main_shell.dart';
+import '../../viewmodels/auth_viewmodel.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/home',
     redirect: (context, state) {
-      final bool loggedIn = FirebaseAuth.instance.currentUser != null;
+      final bool loggedIn = context.read<AuthViewModel>().isAuthenticated;
       final bool loggingIn = state.uri.path == '/login';
 
       if (!loggedIn) {

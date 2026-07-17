@@ -19,25 +19,12 @@ void main() {
       // 1. Reset DI and register mocks
       await sl.reset();
       
-      final mockConfig = AppConfig(
-        googleSignInWebClientId: 'mock_client_id',
-        webFirebaseOptions: const FirebaseOptions(
-          apiKey: 'mock_key',
-          appId: 'mock_app_id',
-          messagingSenderId: 'mock_sender_id',
-          projectId: 'mock_project_id',
-          authDomain: 'mock_auth_domain',
-          storageBucket: 'mock_storage_bucket',
-        ),
-        androidFirebaseOptions: const FirebaseOptions(
-          apiKey: 'mock_key',
-          appId: 'mock_app_id',
-          messagingSenderId: 'mock_sender_id',
-          projectId: 'mock_project_id',
-          storageBucket: 'mock_storage_bucket',
-        ),
-      );
-      await di.init(mockConfig);
+      final config = await AppConfig.load();
+      try {
+        await Firebase.initializeApp(options: config.firebaseOptions);
+      } catch (e) {} // Ignore if already initialized
+      
+      await di.init(config);
       
       await sl.unregister<AuthService>();
       await sl.unregister<AnalyticsService>();
@@ -50,9 +37,13 @@ void main() {
 
       // 2. Launch App
       await $.pumpWidgetAndSettle(const MyApp());
+      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
+      await $.pumpAndSettle();
 
       // 3. Log In (Verify 'login' event logged)
       await $.tap($('Continue with Google'));
+      await $.pumpAndSettle();
+      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
       await $.pumpAndSettle();
       
       expect(mockAnalytics.loggedEvents.contains('login'), isTrue);
@@ -60,6 +51,8 @@ void main() {
       // 4. Enter a search topic (e.g. 'Cybersecurity') and search
       await $.enterText(find.byType(TextField), 'Cybersecurity');
       await $.tap(find.byIcon(Icons.arrow_forward_rounded));
+      await $.pumpAndSettle();
+      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
       await $.pumpAndSettle();
 
       // 5. Verify 'search_topic' event is logged with correct parameters
@@ -69,7 +62,12 @@ void main() {
       // 6. Navigate to Profile, Sign Out, and verify 'logout' event logged
       await $.tap($('Profile'));
       await $.pumpAndSettle();
+      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
+      await $.pumpAndSettle();
+      
       await $.tap($('Sign Out'));
+      await $.pumpAndSettle();
+      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
       await $.pumpAndSettle();
 
       expect(mockAnalytics.loggedEvents.contains('logout'), isTrue);

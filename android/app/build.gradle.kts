@@ -44,5 +44,5 @@ flutter {
 }
 
 dependencies {
-    androidTestImplementation("pl.leancode.patrol:patrol_finder:3.20.0")
+    androidTestImplementation(project(":patrol"))
 }

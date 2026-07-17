@@ -38,5 +38,6 @@ android/key.properties
 
 # Secret Environment Files & Configuration
 .env.json
+.patrol.env
 !.vscode/launch.json
 android/app/google-services.json

@@ -3,12 +3,12 @@ import 'package:journal_trend_analyzer/models/keyword_analytics.dart';
 
 void main() {
   test('keyword analytics calculates growth and most active year', () {
-    final analytics = KeywordAnalytics(
+    const analytics = KeywordAnalytics(
       id: 'https://openalex.org/topics/T1',
       name: 'Deep Learning',
       publicationCount: 48,
       totalTopicPublications: 100,
-      trendByYear: const {2023: 20, 2024: 28, 2025: 48},
+      trendByYear: {2023: 20, 2024: 28, 2025: 48},
     );
 
     expect(analytics.percentage, 48.0);

@@ -18,25 +18,12 @@ void main() {
       // 1. Reset DI and register mocks
       await sl.reset();
       
-      final mockConfig = AppConfig(
-        googleSignInWebClientId: 'mock_client_id',
-        webFirebaseOptions: const FirebaseOptions(
-          apiKey: 'mock_key',
-          appId: 'mock_app_id',
-          messagingSenderId: 'mock_sender_id',
-          projectId: 'mock_project_id',
-          authDomain: 'mock_auth_domain',
-          storageBucket: 'mock_storage_bucket',
-        ),
-        androidFirebaseOptions: const FirebaseOptions(
-          apiKey: 'mock_key',
-          appId: 'mock_app_id',
-          messagingSenderId: 'mock_sender_id',
-          projectId: 'mock_project_id',
-          storageBucket: 'mock_storage_bucket',
-        ),
-      );
-      await di.init(mockConfig);
+      final config = await AppConfig.load();
+      try {
+        await Firebase.initializeApp(options: config.firebaseOptions);
+      } catch (e) {} // Ignore if already initialized
+      
+      await di.init(config);
       
       await sl.unregister<AuthService>();
       await sl.unregister<AnalyticsService>();
@@ -53,9 +40,13 @@ void main() {
       // 3. Verify unauthenticated redirect to Login Screen
       expect($('Authentication Required'), findsOneWidget);
       expect($('Continue with Google'), findsOneWidget);
+      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
+      await $.pumpAndSettle();
 
       // 4. Tap the Google Sign-In button
       await $.tap($('Continue with Google'));
+      await $.pumpAndSettle();
+      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
       await $.pumpAndSettle();
 
       // 5. Verify transition to Search Screen (Home)
@@ -65,6 +56,8 @@ void main() {
       // 6. Navigate to Profile tab in bottom navigation
       await $.tap($('Profile'));
       await $.pumpAndSettle();
+      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
+      await $.pumpAndSettle();
 
       // 7. Verify user profile details display correctly
       expect($('User Settings & Labs'), findsOneWidget);
@@ -73,6 +66,8 @@ void main() {
 
       // 8. Tap Sign Out button
       await $.tap($('Sign Out'));
+      await $.pumpAndSettle();
+      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
       await $.pumpAndSettle();
 
       // 9. Verify redirect back to Login Screen

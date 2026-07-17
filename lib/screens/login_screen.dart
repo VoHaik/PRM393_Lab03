@@ -89,12 +89,12 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(height: 10),
 
                     // Subtitle
-                    Text(
+                    const Text(
                       'Firebase-Powered Journal Trend Analyzer',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
-                        color: const Color(0xFF94A3B8),
+                        color: Color(0xFF94A3B8),
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -119,12 +119,12 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          Text(
+                          const Text(
                             'Please sign in with your Google account to access analytics dashboards, export PDF reports, and receive update notifications.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 12,
-                              color: const Color(0xFF94A3B8),
+                              color: Color(0xFF94A3B8),
                               height: 1.5,
                             ),
                           ),
@@ -215,11 +215,11 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(height: 40),
 
                     // Version footer
-                    Text(
+                    const Text(
                       'Version 1.0.0',
                       style: TextStyle(
                         fontSize: 11,
-                        color: const Color(0xFF475569),
+                        color: Color(0xFF475569),
                       ),
                     ),
                   ],
