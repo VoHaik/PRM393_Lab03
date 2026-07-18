@@ -23,9 +23,23 @@ void main() async {
   final config = await AppConfig.load();
 
   // Initialize Firebase
-  await Firebase.initializeApp(
-    options: config.firebaseOptions,
-  );
+  try {
+    await Firebase.initializeApp(
+      options: config.firebaseOptions,
+    );
+  } on FirebaseException catch (e) {
+    if (e.code == 'duplicate-app') {
+      debugPrint('Firebase already initialized natively (duplicate-app).');
+    } else {
+      rethrow;
+    }
+  } catch (e) {
+    if (e.toString().contains('duplicate-app')) {
+      debugPrint('Firebase already initialized natively (duplicate-app).');
+    } else {
+      rethrow;
+    }
+  }
 
   // Initialize Crashlytics: bắt toàn bộ Flutter framework errors
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
